@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vocab Trainer – Fachschaft Englisch FOSBOS Weiden</title>
+<meta name="theme-color" content="#97b400">
+<meta name="description" content="Vocab Trainer der Fachschaft Englisch, FOSBOS Weiden – Vokabeln lernen mit Spaced Repetition.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Vocab">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+/* Fonts are self-hosted (no requests to Google – GDPR) */
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/source-sans-3-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/source-sans-3-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/source-sans-3-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:800;font-display:swap;src:url(fonts/source-sans-3-latin-800-normal.woff2) format('woff2')}
+:root{
+  --g:#97b400; --g-dark:#4d5c00; --g-ink:#1c2400; --g-tint:#f4f8e4; --g-tint2:#e3eebb;
+  --ink:#1d2416; --muted:#5f6857; --line:#dfe5d3; --bg:#fafbf6;
+  --red:#b83227; --red-t:#fbe9e6; --amber:#9a6200; --amber-t:#fdf1da; --grey-t:#eef0ea;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Source Sans 3',system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.45;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+header{background:#fff;border-bottom:4px solid var(--g)}
+.hwrap{max-width:820px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 16px 6px}
+.hwrap img{height:58px;width:auto}
+.htitle{font-weight:800;font-size:1.45rem;letter-spacing:-.015em;line-height:1.1}
+.hsub{color:var(--muted);font-size:.85rem}
+nav{max-width:820px;margin:0 auto;display:flex;gap:2px;padding:0 10px;overflow-x:auto;scrollbar-width:none}
+nav button{background:none;border:0;padding:10px 12px 9px;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;margin-bottom:-4px}
+nav button.on{color:var(--g-ink);border-bottom-color:var(--g-dark)}
+main{max-width:820px;margin:0 auto;padding:18px 16px 80px}
+h2{font-size:1.25rem;margin:0 0 10px;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.05rem;margin:0 0 6px;font-weight:700}
+p{margin:0 0 10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+.card.tint{background:var(--g-tint);border-color:var(--g-tint2)}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.spread{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.btn{appearance:none;border:0;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;transition:filter .1s,transform .05s}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--g);color:var(--g-ink)}
+.btn.primary:hover{filter:brightness(.95)}
+.btn.primary:disabled{background:var(--grey-t);color:#9aa292;cursor:default}
+.btn.ghost{background:#fff;border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--g)}
+.btn.sm{padding:6px 12px;min-height:36px;font-size:.9rem}
+.btn.danger{background:var(--red-t);color:var(--red)}
+.btn.big{font-size:1.15rem;padding:14px 26px;min-height:56px}
+.btn.block{width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-weight:600;font-size:.9rem;cursor:pointer}
+.chip.on{background:var(--g-tint2);border-color:var(--g);color:var(--g-ink)}
+.tag{display:inline-block;border-radius:6px;padding:1px 7px;font-size:.78rem;font-weight:700;letter-spacing:.02em;text-transform:uppercase}
+.st-new{background:var(--grey-t);color:#5d6458}
+.st-learning{background:var(--amber-t);color:var(--amber)}
+.st-familiar{background:var(--g-tint2);color:var(--g-dark)}
+.st-mastered{background:var(--g-dark);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.stat{background:#fff;border:1px solid var(--g-tint2);border-radius:12px;padding:10px 12px;text-align:center}
+.stat b{display:block;font-size:1.7rem;line-height:1.1;font-weight:800}
+.stat span{font-size:.82rem;color:var(--muted)}
+.bar{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--grey-t)}
+.bar i{display:block;height:100%}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.82rem;color:var(--muted);margin-top:6px}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;background:var(--c)}
+.fc{display:flex;gap:6px;align-items:flex-end;height:90px;margin-top:8px}
+.fc div{flex:1;text-align:center;font-size:.75rem;color:var(--muted)}
+.fc div i{display:block;background:var(--g);border-radius:4px 4px 0 0;margin:0 auto 3px;width:70%;min-height:2px}
+input[type=text],input[type=search],textarea,select{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--g)}
+textarea{min-height:140px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88rem}
+textarea.prose{font-family:inherit;font-size:1rem;min-height:90px}
+label.f{display:block;font-weight:700;font-size:.9rem;margin:10px 0 4px}
+.warn{background:var(--amber-t);border:1px solid #f0d49b;color:#6b4500;border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:.92rem}
+/* session */
+.sess-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.prog{flex:1;height:10px;background:var(--grey-t);border-radius:5px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--g);transition:width .25s}
+.qcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px 20px;box-shadow:0 2px 0 var(--g-tint2)}
+.mode{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--g-dark);margin-bottom:10px;display:flex;gap:8px;align-items:center}
+.prompt{font-size:1.9rem;font-weight:800;line-height:1.2;letter-spacing:-.01em;margin:4px 0 6px;word-break:break-word}
+.prompt.de{color:#2d3a12}
+.prompt.def{font-size:1.25rem;font-weight:600}
+.wc{color:var(--muted);font-weight:600;font-size:.95rem}
+.ex{background:var(--g-tint);border-left:4px solid var(--g);padding:10px 12px;border-radius:0 10px 10px 0;margin:12px 0;font-size:1.05rem}
+.ex b{color:var(--g-dark)}
+.gapline{font-size:1.3rem;line-height:1.6;margin:8px 0 4px}
+.gap{display:inline-block;min-width:110px;border-bottom:3px solid var(--g);text-align:center;color:var(--g-dark);font-weight:700}
+.opts{display:grid;gap:10px;margin-top:14px}
+.opt{text-align:left;background:#fff;border:2px solid var(--line);border-radius:12px;padding:13px 16px;font-weight:600;cursor:pointer;font-size:1.05rem}
+.opt:hover{border-color:var(--g)}
+.opt.right{background:var(--g-tint2);border-color:var(--g)}
+.opt.wrong{background:var(--red-t);border-color:var(--red)}
+.answer-in{font-size:1.3rem;padding:13px 14px;margin-top:12px}
+.fb{margin-top:16px;border-radius:12px;padding:14px 16px}
+.fb.ok{background:var(--g-tint);border:1.5px solid var(--g)}
+.fb.mid{background:var(--amber-t);border:1.5px solid #e9c37a}
+.fb.bad{background:var(--red-t);border:1.5px solid #e6aaa3}
+.fb h4{margin:0 0 4px;font-size:1.05rem}
+.rate{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.rate button{border:0;border-radius:12px;padding:10px 4px;font-weight:800;cursor:pointer;min-height:62px;line-height:1.15}
+.rate button small{display:block;font-weight:600;font-size:.78rem;opacity:.85;margin-top:2px}
+.r1{background:var(--red-t);color:var(--red)}
+.r2{background:var(--amber-t);color:var(--amber)}
+.r3{background:var(--g-tint2);color:var(--g-ink)}
+.r4{background:var(--g-dark);color:#fff}
+.speak{background:var(--g-tint);border:0;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1.1rem;flex:none}
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.actions .btn{flex:1}
+.kbd{font-size:.75rem;color:var(--muted)}
+/* words */
+.wl{list-style:none;margin:10px 0 0;padding:0;border-top:1px solid var(--line)}
+.wl li{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+.wl li:hover{background:var(--g-tint)}
+.wl .w{flex:1;min-width:0}
+.wl .w b{font-weight:700}
+.wl .w div{color:var(--muted);font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wl .due{font-size:.8rem;color:var(--muted);white-space:nowrap}
+details>summary{cursor:pointer;font-weight:700;color:var(--g-dark);margin-top:10px;list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"▸ "}
+details[open]>summary::before{content:"▾ "}
+.toggle{position:relative;width:46px;height:28px;flex:none}
+.toggle input{opacity:0;width:0;height:0}
+.toggle span{position:absolute;inset:0;background:#cfd5c6;border-radius:14px;transition:.15s;cursor:pointer}
+.toggle span::after{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s}
+.toggle input:checked+span{background:var(--g)}
+.toggle input:checked+span::after{left:21px}
+table.prev{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:8px}
+table.prev th,table.prev td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:top}
+table.prev th{background:var(--g-tint)}
+pre.code{background:#f5f6f2;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.8rem;overflow-x:auto;white-space:pre-wrap;margin:6px 0 10px}
+/* modal + toast */
+.modal-bg{position:fixed;inset:0;background:rgba(25,30,15,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:16px}
+@media(min-width:620px){.modal-bg{align-items:center}}
+.modal{background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:90vh;overflow:auto;padding:20px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--g-ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:600;z-index:60;box-shadow:0 4px 18px rgba(0,0,0,.2);max-width:90vw;text-align:center}
+.done-hero{text-align:center;padding:10px 0}
+.done-hero .emoji{font-size:3rem}
+ul.tips{margin:6px 0 0;padding-left:20px}
+ul.tips li{margin-bottom:4px}
+.sent{border-bottom:1px solid var(--line);padding:10px 0}
+.sent:last-child{border-bottom:0}
+.dict-search{display:flex;gap:8px}
+.dict-search input{flex:1;font-size:1.15rem}
+.wcls{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.fld{display:flex;gap:6px;align-items:flex-start}
+.fld>*:first-child{flex:1}
+.paste{flex:none;background:var(--g-tint);border:1.5px solid var(--g-tint2);border-radius:10px;min-height:44px;padding:0 10px;cursor:pointer;font-weight:700;font-size:.85rem}
+.hint{font-size:.85rem;margin-top:4px}
+.hint.ok{color:var(--g-dark)}.hint.no{color:var(--amber)}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 0 30px}
+@media(max-width:480px){.prompt{font-size:1.6rem}.stats b{font-size:1.4rem}.hwrap img{height:48px}.rate button{min-height:58px;font-size:.92rem}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hwrap">
+    <img src="data:image/png;base64,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" alt="Fachschaft Englisch FOSBOS Weiden">
+    <div><div class="htitle">Vocab Trainer</div><div class="hsub">FOSBOS Weiden · Fachschaft Englisch</div></div>
+  </div>
+  <nav id="nav"></nav>
+</header>
+<main id="app"></main>
+<footer>Your progress is saved on this device only. Learning on tablet <i>and</i> phone? → <a href="#" onclick="go('options');return false" style="color:var(--g-dark);font-weight:700">Transfer progress</a></footer>
+<div id="modal-root"></div>
+
+<script>
+/* ===================== Storage ===================== */
+const KEY = 'fosbos-vocab-trainer-v1';
+let storageOK = true;
+let DB;
+
+/* Demo list: lets anyone try every mode of the app from a fresh start.
+   All fields are filled and every example sentence contains the word (gap mode). */
+const DEMO_NAME = 'Demo – Social media';
+const DEMO = {
+  set: DEMO_NAME,
+  words: [
+    {en:'to scroll (v.)', de:'scrollen', def:'to move text or pictures on a screen up or down', ex:'I scrolled through my feed for over an hour last night.'},
+    {en:'addictive (adj.)', de:'süchtig machend', def:'making you want to do or have it again and again', ex:'Many apps are designed to be addictive.'},
+    {en:'screen time (n.)', de:'Bildschirmzeit', def:'the time you spend looking at a phone, TV or computer', ex:'My screen time was almost six hours yesterday.'},
+    {en:'to rely on sth (phr. v.)', de:'sich auf etw. verlassen', def:'to need sth and trust it to help you', ex:'Teenagers rely on their phones for almost everything.'},
+    {en:'privacy (n.)', de:'Privatsphäre, Datenschutz', def:'the right to keep your personal life and data to yourself', ex:'Check your privacy settings before you post photos.'},
+    {en:'misleading (adj.)', de:'irreführend', def:'giving people a wrong idea or false impression', ex:'The advert for the energy drink was misleading.'},
+    {en:'influencer (n.)', de:'Influencer(in)', def:'a person who earns money by promoting products online', ex:'The influencer got paid for every post about the shoes.'},
+    {en:'to cope with sth (v.)', de:'mit etw. zurechtkommen, etw. bewältigen', def:'to deal successfully with a difficult situation', ex:'Many students find it hard to cope with exam stress.'},
+    {en:'reliable / trustworthy (adj.)', de:'zuverlässig, vertrauenswürdig', def:'that you can believe and depend on', ex:'Is this website a reliable source for your presentation?'},
+    {en:'peer pressure (n.)', de:'Gruppenzwang', def:'the feeling that you must do what your friends do', ex:'Peer pressure can make young people take silly risks.'},
+    {en:'to raise awareness (of sth) (phr.)', de:'auf etw. aufmerksam machen, sensibilisieren', def:'to make more people know about a problem', ex:'The campaign aims to raise awareness of cyberbullying.'},
+    {en:'consumer (n.)', de:'Verbraucher(in), Konsument(in)', def:'a person who buys things or uses services', ex:'Most consumers read online reviews before they buy.'}
+  ]
+};
+function demoSet(){ return findSetByName(DEMO_NAME); }
+function loadDemo(silent){
+  importData(DEMO);
+  const s = demoSet(); s.demo = true; s.active = true; delete s.test; delete s.testName;
+  // fresh start: the demo always begins "as new"
+  cards().filter(c => c.set === s.id).forEach(c => { Object.assign(c, {reps:0, s:null, d:null, due:null, last:null, lapses:0}); delete c.prep; });
+  save();
+  if(!silent){ toast('Demo list ready – 12 words'); go('today'); }
+}
+function demoTestTomorrow(){
+  const s = demoSet(); if(!s) return;
+  s.test = dayNum() + 1; s.testName = 'Demo test'; save();
+  toast('Demo test set for tomorrow – see Test prep on the start page'); go('today');
+}
+
+function blank(){
+  return {v:1, sets:{}, cards:{}, sentences:[], seq:0,
+    settings:{newPerDay:10, roundSize:20, retention:0.9, mode:'smart'},
+    daily:{day:0, newCount:0, reviews:0}, history:{}};
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){ const d = JSON.parse(raw); DB = Object.assign(blank(), d); DB.settings = Object.assign(blank().settings, d.settings||{}); return; }
+  }catch(e){ storageOK = false; }
+  DB = blank();
+  loadDemo(true);
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(DB)); }
+  catch(e){ storageOK = false; }
+}
+
+/* ===================== Helpers ===================== */
+function dayNum(){ const n = new Date(); return Math.floor((n.getTime() - n.getTimezoneOffset()*60000)/86400000); }
+function uid(){ return Math.random().toString(36).slice(2,9) + Date.now().toString(36).slice(-4); }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function touchDaily(){ const t = dayNum(); if(DB.daily.day !== t) DB.daily = {day:t, newCount:0, reviews:0}; }
+function cards(){ return Object.values(DB.cards); }
+function activeCards(){ return cards().filter(c => DB.sets[c.set] && DB.sets[c.set].active); }
+
+/* ===================== FSRS-5 (default parameters) ===================== */
+const W = [0.40255,1.18385,3.173,15.69105,7.1949,0.5345,1.4604,0.0046,1.54575,0.1192,1.01925,1.9395,0.11,0.29605,2.2698,0.2315,2.9898,0.51655,0.6621];
+const DECAY = -0.5, FACTOR = 19/81;
+const clampD = d => Math.min(10, Math.max(1, d));
+const initS = g => W[g-1];
+const initD = g => clampD(W[4] - Math.exp(W[5]*(g-1)) + 1);
+const retr = (t, s) => Math.pow(1 + FACTOR*t/s, DECAY);
+function intervalFor(s){
+  const r = DB.settings.retention;
+  const i = s/FACTOR * (Math.pow(r, 1/DECAY) - 1);
+  return Math.min(365, Math.max(1, Math.round(i)));
+}
+function nextD(d, g){ const d1 = d + (-W[6]*(g-3)) * (10-d)/9; return clampD(W[7]*initD(4) + (1-W[7])*d1); }
+function sRecall(d, s, r, g){
+  return s * (1 + Math.exp(W[8]) * (11-d) * Math.pow(s, -W[9]) * (Math.exp(W[10]*(1-r)) - 1) * (g===2?W[15]:1) * (g===4?W[16]:1));
+}
+function sForget(d, s, r){ return Math.min(s, W[11] * Math.pow(d, -W[12]) * (Math.pow(s+1, W[13]) - 1) * Math.exp(W[14]*(1-r))); }
+function nextState(c, g){
+  const t = dayNum(); let s, d;
+  if(!c.reps){ s = initS(g); d = initD(g); }
+  else{
+    const el = Math.max(0, t - c.last), r = retr(el, c.s);
+    if(el === 0) s = c.s * Math.exp(W[17]*(g-3+W[18]));
+    else s = g===1 ? sForget(c.d, c.s, r) : sRecall(c.d, c.s, r, g);
+    d = nextD(c.d, g);
+  }
+  s = Math.max(0.1, s);
+  return {s, d, last:t, due: t + (g===1 ? 1 : intervalFor(s))};
+}
+function applyRating(c, g){
+  const n = nextState(c, g);
+  if(g===1 && c.reps) c.lapses = (c.lapses||0) + 1;
+  Object.assign(c, n); c.reps = (c.reps||0) + 1; capForTest(c);
+  touchDaily(); DB.daily.reviews++;
+  DB.history[n.last] = (DB.history[n.last]||0) + 1;
+  save();
+}
+/* Deadline: if the next review would come after the test and recall on test day
+   is predicted below the target, review the day before the test instead. */
+function capForTest(c){
+  const s = DB.sets[c.set], t = dayNum();
+  if(!s || s.test == null || s.test <= t || !c.reps) return;
+  const T = s.test;
+  if(c.due >= T && retr(T - c.last, c.s) < DB.settings.retention) c.due = Math.max(t+1, T-1);
+}
+/* When a test date is set: words that would not be reviewed before the test are
+   spread over the last week before it (no single overloaded day). */
+function retarget(setId){
+  const s = DB.sets[setId], t = dayNum();
+  if(!s || s.test == null || s.test <= t) return;
+  const T = s.test, lo = Math.max(t, T-7);
+  cards().filter(c => c.set===setId && c.reps).forEach(c => {
+    if(c.due >= T && retr(T - c.last, c.s) < DB.settings.retention) c.due = lo + Math.floor(Math.random()*(T-lo));
+  });
+}
+function ivlLabel(days){ return days<=1 ? '1 day' : days<30 ? days+' days' : days<365 ? Math.round(days/30)+' mo' : '1 yr'; }
+
+/* ===================== Word helpers ===================== */
+function wordClass(en){ const m = String(en).match(/\(([^)]*)\)/); return m ? m[1] : ''; }
+function headword(en){ return String(en).replace(/\([^)]*\)/g,'').replace(/\s+/g,' ').trim(); }
+function norm(x){
+  return String(x).toLowerCase().replace(/[’‘`´]/g,"'").replace(/\([^)]*\)/g,' ')
+    .replace(/\b(sth|sb|something|somebody|someone)\b/g,' ')
+    .replace(/[.,!?;:"“”]/g,' ').replace(/\s+/g,' ').trim().replace(/^to /,'');
+}
+function variants(en){ return [...new Set(headword(en).split(/\s*[\/;,]\s*/).map(norm).filter(Boolean))]; }
+function lev(a, b){
+  const m = a.length, n = b.length; if(!m) return n; if(!n) return m;
+  let prev = Array.from({length:n+1}, (_,j)=>j);
+  for(let i=1;i<=m;i++){ const cur=[i]; for(let j=1;j<=n;j++){ cur[j]=Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+(a[i-1]===b[j-1]?0:1)); } prev=cur; }
+  return prev[n];
+}
+function grade(input, targets){
+  const n = norm(input); if(!n) return 'wrong';
+  if(targets.includes(n)) return 'ok';
+  for(const t of targets){ const tol = t.length<=4 ? 0 : t.length<=8 ? 1 : 2; if(tol && lev(n,t) <= tol) return 'typo'; }
+  return 'wrong';
+}
+function gapInfo(c){
+  if(!c.ex) return null;
+  for(const v of variants(c.en)){
+    let stem = v;
+    if(stem.length>4 && /[ey]$/.test(stem)) stem = stem.slice(0,-1);
+    const pat = '\\b' + stem.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/ /g,'\\s+') + "[\\w'’-]*";
+    const m = c.ex.match(new RegExp(pat,'i'));
+    if(m) return {before:c.ex.slice(0,m.index), answer:m[0], after:c.ex.slice(m.index+m[0].length), base:v};
+  }
+  return null;
+}
+function exHTML(c){
+  const g = gapInfo(c);
+  if(!g) return esc(c.ex);
+  return esc(g.before) + '<b>' + esc(g.answer) + '</b>' + esc(g.after);
+}
+function stage(c){ if(!c.reps) return 'new'; if(c.s < 7) return 'learning'; if(c.s < 30) return 'familiar'; return 'mastered'; }
+function stageTag(c){ const s = stage(c); return `<span class="tag st-${s}">${s}</span>`; }
+function dueText(c){ if(!c.reps) return 'not started'; const d = c.due - dayNum(); return d<=0 ? 'due today' : d===1 ? 'tomorrow' : 'in '+d+' days'; }
+const canSpeak = 'speechSynthesis' in window;
+function speak(text){
+  try{ const u = new SpeechSynthesisUtterance(headword(text).replace(/\bsth\b/g,'something').replace(/\bsb\b/g,'somebody'));
+    u.lang='en-GB'; u.rate=.92; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+function speakBtn(c){ return canSpeak ? `<button class="speak" title="Listen" onclick="speak(DB.cards['${c.id}'].en)">🔊</button>` : ''; }
+
+/* ===================== Import ===================== */
+const ALIASES = {
+  en:['en','english','englisch','word','wort','vocab','vocabulary','term','vokabel'],
+  de:['de','german','deutsch','translation','übersetzung','bedeutung (dt.)'],
+  def:['def','definition','explanation','meaning','erklärung','english explanation'],
+  ex:['ex','example','beispiel','sentence','example sentence','beispielsatz','context'],
+  src:['src','source','quelle','ref','paragraph','absatz']
+};
+function fieldOf(name){ const n = String(name).toLowerCase().trim(); for(const k in ALIASES) if(ALIASES[k].includes(n)) return k; return null; }
+function normWord(o){
+  const w = {};
+  for(const k in o){ const f = fieldOf(k); if(f && o[k] != null && String(o[k]).trim()) w[f] = String(o[k]).trim(); }
+  return w.en ? w : null;
+}
+function findSetByName(name){ return Object.values(DB.sets).find(s => s.name.toLowerCase() === name.toLowerCase()); }
+function importData(data, fallbackName){
+  // returns {added, updated, sets:[names]}
+  let groups = [];
+  if(Array.isArray(data)){
+    if(data.length && data[0] && (data[0].words || data[0].set)) groups = data;
+    else groups = [{set:fallbackName, words:data}];
+  } else if(data && Array.isArray(data.sets)) groups = data.sets;
+  else if(data && Array.isArray(data.words)) groups = [data];
+  else throw new Error('No words found.');
+  let added = 0, updated = 0; const names = []; const retargetLater = [];
+  for(const g of groups){
+    const name = String(g.set || g.name || fallbackName || 'My words').trim();
+    let set = findSetByName(name);
+    if(!set){ set = {id:uid(), name, active:true, created:Date.now()}; DB.sets[set.id] = set; }
+    if(g.test){ const d = isoToDay(g.test); if(d != null){ set.test = d; if(g.testName) set.testName = String(g.testName); retargetLater.push(set.id); } }
+    names.push(name);
+    for(const raw of (g.words||[])){
+      const w = normWord(raw); if(!w) continue;
+      const existing = cards().find(c => c.set===set.id && norm(c.en)===norm(w.en));
+      if(existing){ Object.assign(existing, w); updated++; }
+      else{ const id = uid(); DB.cards[id] = Object.assign({id, set:set.id, n:++DB.seq, reps:0}, w); added++; }
+    }
+  }
+  retargetLater.forEach(retarget);
+  save();
+  return {added, updated, sets:[...new Set(names)]};
+}
+function parseTable(text){
+  let lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l && !/^\|?\s*:?-{2,}/.test(l));
+  if(!lines.length) return [];
+  const sample = lines.slice(0,5).join('\n');
+  let sep;
+  if(sample.includes('\t')) sep = '\t';
+  else if(sample.includes('|')) sep = '|';
+  else if(sample.includes(';')) sep = ';';
+  else if(/ [–—-] /.test(sample)) sep = / [–—-] /;
+  else if(sample.includes(' = ')) sep = ' = ';
+  else sep = ',';
+  const split = l => { let s = l; if(sep==='|') s = s.replace(/^\|/,'').replace(/\|$/,''); return s.split(sep).map(x => x.trim()); };
+  let order = ['en','de','def','ex','src'];
+  const head = split(lines[0]).map(fieldOf);
+  if(head.filter(Boolean).length >= 2 && head.includes('en')){ order = head; lines = lines.slice(1); }
+  return lines.map(l => { const cells = split(l); const o = {}; order.forEach((f,i) => { if(f && cells[i]) o[f] = cells[i]; }); return o; }).filter(o => o.en);
+}
+function parseInput(text, name){
+  const t = text.trim(); if(!t) throw new Error('Paste some words first.');
+  if(/^[\[{]/.test(t)){
+    let data; try{ data = JSON.parse(t); }catch(e){ throw new Error('This looks like a code, but it is incomplete. Copy it again.'); }
+    return data;
+  }
+  return {set:name, words:parseTable(t)};
+}
+function countWords(data){
+  if(Array.isArray(data)) return data[0] && data[0].words ? data.reduce((a,g)=>a+(g.words||[]).length,0) : data.length;
+  if(data.sets) return data.sets.reduce((a,g)=>a+(g.words||[]).length,0);
+  return (data.words||[]).length;
+}
+function previewWords(data){
+  if(Array.isArray(data)) return data[0] && data[0].words ? data.flatMap(g=>g.words) : data;
+  if(data.sets) return data.sets.flatMap(g=>g.words||[]);
+  return data.words || [];
+}
+function exportSet(setId){
+  const s = DB.sets[setId];
+  const words = cards().filter(c => c.set===setId).sort((a,b)=>a.n-b.n).map(c => { const o = {en:c.en}; ['de','def','ex','src'].forEach(k => { if(c[k]) o[k]=c[k]; }); return o; });
+  const o = {set:s.name}; if(s.test != null){ o.test = dayToIso(s.test); if(s.testName) o.testName = s.testName; } o.words = words;
+  return JSON.stringify(o);
+}
+
+/* ===================== UI basics ===================== */
+let VIEW = 'today', SESSION = null;
+const app = document.getElementById('app');
+const TABS = [['today','Today'],['words','My words'],['dict','Dictionary'],['import','Import'],['sentences','My sentences'],['options','Options']];
+function renderNav(){
+  document.getElementById('nav').innerHTML = TABS.map(([k,l]) => `<button class="${VIEW===k?'on':''}" onclick="go('${k}')">${l}</button>`).join('');
+}
+function go(v){ VIEW = v; if(v !== 'session') SESSION = null; render(); window.scrollTo(0,0); }
+function render(){ renderNav(); ({today:viewToday, words:viewWords, import:viewImport, dict:viewDict, sentences:viewSentences, options:viewOptions, session:viewSession})[VIEW](); }
+function toast(msg){ const t = document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 2400); }
+function modal(html){ const r = document.getElementById('modal-root'); r.innerHTML = `<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">${html}</div></div>`; }
+function closeModal(){ document.getElementById('modal-root').innerHTML=''; }
+let _confirmFn = null;
+function confirmBox(text, ok, fn){ _confirmFn = fn; modal(`<p style="font-size:1.05rem">${text}</p><div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="closeModal();_confirmFn&&_confirmFn()">${ok}</button></div>`); }
+async function copyText(txt, msg){
+  try{ await navigator.clipboard.writeText(txt); toast(msg||'Copied'); }
+  catch(e){ modal(`<h3>Copy this code</h3><p class="small muted">Select all and copy it.</p><textarea readonly onclick="this.select()">${esc(txt)}</textarea><div class="actions"><button class="btn primary" onclick="closeModal()">Done</button></div>`); }
+}
+
+/* ===================== Today ===================== */
+function streak(){ let t = dayNum(); if(!DB.history[t]) t--; let n = 0; while(DB.history[t] > 0){ n++; t--; } return n; }
+function dueCount(){ const t = dayNum(); return activeCards().filter(c => c.reps && c.due <= t).length; }
+const BRAKE_HALF = 60, BRAKE_STOP = 100, URGENT_DAYS = 4, URGENT_MAX = 25;
+function isoToDay(iso){ const m = String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? Math.floor(Date.UTC(+m[1], +m[2]-1, +m[3]) / 864e5) : null; }
+function dayToIso(d){ return new Date(d*864e5).toISOString().slice(0,10); }
+function fmtDay(d){ return new Date(d*864e5).toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short', timeZone:'UTC'}); }
+function inDays(d){ const k = d - dayNum(); return k===0 ? 'today' : k===1 ? 'tomorrow' : 'in '+k+' days'; }
+function lastPractice(){ const ks = Object.keys(DB.history).map(Number).filter(k => DB.history[k] > 0); return ks.length ? Math.max(...ks) : null; }
+function upcomingTests(){ const t = dayNum(); return Object.values(DB.sets).filter(s => s.active && s.test != null && s.test >= t).sort((a,b) => a.test - b.test); }
+/* All lists with the same test date form one test (e.g. 10 lists for a Schulaufgabe). */
+function testGroups(){
+  const g = {};
+  upcomingTests().forEach(s => { const x = g[s.test] = g[s.test] || {test:s.test, sets:[], name:''}; x.sets.push(s); if(!x.name && s.testName) x.name = s.testName; });
+  return Object.values(g).sort((a,b) => a.test-b.test).map(x => { x.name = x.name || (x.sets.length===1 ? x.sets[0].name : 'Test'); x.key = 'g'+x.test; return x; });
+}
+function groupCards(day){ return cards().filter(c => DB.sets[c.set] && DB.sets[c.set].test === day); }
+function prepWindow(day){ return groupCards(day).length > 40 ? 7 : 3; }
+function isUrgent(set){
+  const t = dayNum(); if(!set || set.test == null || set.test < t) return false;
+  const unstarted = groupCards(set.test).filter(c => !c.reps).length;
+  return set.test - t <= Math.max(URGENT_DAYS, Math.ceil(unstarted/20) + 2);
+}
+/* New words for today: words of sets with a test soon come first and bypass the daily limit;
+   the rest is limited by "new words per day" and braked when many reviews are due. */
+function newPlan(){
+  touchDaily();
+  const t = dayNum(), due = dueCount();
+  const prio = c => { const s = DB.sets[c.set]; return (s.test != null && s.test >= t) ? s.test : 1e9; };
+  const fresh = activeCards().filter(c => !c.reps).sort((a,b) => prio(a)-prio(b) || a.n-b.n);
+  const urgent = fresh.filter(c => isUrgent(DB.sets[c.set])).slice(0, URGENT_MAX);
+  const factor = due > BRAKE_STOP ? 0 : due > BRAKE_HALF ? 0.5 : 1;
+  const normalLeft = Math.max(0, DB.settings.newPerDay - DB.daily.newCount);
+  const quota = Math.max(0, Math.floor(DB.settings.newPerDay*factor) - DB.daily.newCount);
+  const rest = fresh.filter(c => !urgent.includes(c)).slice(0, Math.max(0, quota - urgent.length));
+  const waiting = fresh.length - urgent.length;
+  return {list:[...urgent, ...rest], urgent:urgent.length, braked: factor < 1 && quota < normalLeft && waiting > rest.length, due, quota};
+}
+function newAvailable(){ return newPlan().list.length; }
+function viewToday(){
+  touchDaily();
+  const plan = newPlan(), due = plan.due, nw = plan.list.length, total = due + nw;
+  const rs = DB.settings.roundSize, rounds = Math.ceil(total / rs), mins = Math.max(1, Math.round(due*0.2 + nw*0.5));
+  const lp = lastPractice(), gap = lp == null ? 0 : dayNum() - lp;
+  const tests = testGroups().slice(0,3);
+  const notes = [];
+  if(gap >= 2 && due > 0) notes.push(`<div class="warn"><b>Welcome back!</b> Your last practice was ${gap} days ago, so ${due} words are waiting. No stress: start with one round of ${rs} – the words you are most likely to forget come first. Two short rounds today and one tomorrow will get you back on track.</div>`);
+  if(plan.braked) notes.push(`<div class="warn"><b>${plan.urgent ? `New today: only the ${plan.urgent} words for your next test` : nw ? `Only ${nw} new word${nw===1?'':'s'} today` : 'No new words today'}</b> – you have ${due} reviews waiting. Catch up first, then the other new words come back automatically.</div>`);
+  const all = activeCards();
+  const st = {new:0, learning:0, familiar:0, mastered:0}; all.forEach(c => st[stage(c)]++);
+  const N = all.length || 1;
+  const t = dayNum(); const fc = [];
+  for(let k=0;k<7;k++) fc.push(all.filter(c => c.reps && (k===0 ? c.due<=t : c.due===t+k)).length);
+  const fmax = Math.max(1, ...fc);
+  const dn = ['Today','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const wd = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const modes = [['smart','Smart mix ★'],['flash','Flashcards'],['mc','Multiple choice'],['type','Type the word'],['def','Definition'],['gap','Gap sentence'],['sentence','My sentence']];
+  app.innerHTML = `
+    ${storageOK ? '' : '<div class="warn"><b>Heads-up:</b> this browser does not allow saving. Your progress will be lost when you close the page.</div>'}
+    ${installNote()}
+    ${IS_IOS && STANDALONE ? `<div class="row" style="justify-content:flex-end;margin:-4px 0 10px"><button class="btn ghost sm" onclick="pasteWords()">📋 Paste words</button></div>` : ''}
+    ${notes.join('')}
+    ${backupDue() ? `<div class="card" style="padding:12px 16px"><div class="spread"><span class="small"><b>💾 Time for a backup.</b> ${DB.meta && DB.meta.backup ? 'Your last backup was '+(dayNum()-cardDay(DB.meta.backup))+' days ago.' : 'You have never saved a backup.'}</span><button class="btn primary sm" onclick="backupNow()">Back up now</button></div></div>` : ''}
+    ${testGroups().filter(g => g.test - dayNum() <= prepWindow(g.test)).map(g => prepPanel(g.key)).join('')}
+    ${!cards().length ? `<div class="card tint"><h2>Welcome to the Vocab Trainer 👋</h2>
+      <p>Import the word lists from your class – or try the app first with a short demo list.</p>
+      <div class="actions"><button class="btn ghost" onclick="loadDemo()">Try the demo list</button><button class="btn primary" onclick="go('import')">Import words</button></div></div>` : ''}
+    ${Object.values(DB.sets).length && Object.values(DB.sets).every(x => x.demo) ? `<div class="card" style="border-style:dashed"><p class="small" style="margin:0"><span class="tag st-new">Demo</span> You are using the <b>demo list</b> to try the app. Import your class lists under <b>Import</b> – you can delete the demo list any time under <b>My words</b>.</p></div>` : ''}
+    <div class="card tint" ${cards().length ? '' : 'style="display:none"'}>
+      <h2>${total ? 'Today’s session' : 'All done for today 🎉'}</h2>
+      <div class="stats">
+        <div class="stat"><b>${due}</b><span>to review</span></div>
+        <div class="stat"><b>${nw}</b><span>new words</span></div>
+        <div class="stat"><b>${streak()}</b><span>day streak</span></div>
+      </div>
+      ${tests.map(g => { const gc = groupCards(g.test), left = gc.filter(c => !c.reps).length, inPrep = g.test - dayNum() <= prepWindow(g.test); return `<p class="small" style="margin:0 0 8px">📅 <b>${esc(g.name)}</b> ${fmtDay(g.test)} (${inDays(g.test)})${g.sets.length>1 ? ` · ${g.sets.length} lists, ${gc.length} words` : ''}${left ? ` · ${left} not started${isUrgent(g.sets[0]) ? ' – included today' : ''}` : ' · all words started ✓'}${inPrep ? ' · 🎯 Test prep above' : ''}</p>`; }).join('')}
+      ${total
+        ? `<button class="btn primary big block" onclick="startSession()">Start round 1 · ${Math.min(rs,total)} cards</button>
+           <p class="small muted" style="margin:8px 0 0;text-align:center">Today: ${total} cards ≈ ${mins} min${rounds>1 ? ` · ${rounds} rounds of ${rs} – you can stop after any round` : ''}</p>`
+        : `<p class="muted">Nothing is due. Come back tomorrow – short daily sessions beat long ones. Want more? Practise a set under <b>My words</b> or import new words.</p>`}
+    </div>
+    <div class="card">
+      <h3>How do you want to practise?</h3>
+      <p class="small muted">Smart mix chooses the task for each word: easy tasks for new words, harder ones (typing, gap sentences, your own sentence) once you know a word better.</p>
+      <div class="chips">${modes.map(([k,l]) => `<button class="chip ${DB.settings.mode===k?'on':''}" onclick="DB.settings.mode='${k}';save();render()">${l}</button>`).join('')}</div>
+    </div>
+    <div class="card">
+      <div class="spread"><h3>Your words</h3><span class="small muted">${all.length} active words</span></div>
+      <div class="bar">
+        <i style="width:${st.mastered/N*100}%;background:var(--g-dark)"></i>
+        <i style="width:${st.familiar/N*100}%;background:var(--g)"></i>
+        <i style="width:${st.learning/N*100}%;background:#e9b44c"></i>
+      </div>
+      <div class="legend">
+        <span style="--c:var(--g-dark)">Mastered ${st.mastered}</span>
+        <span style="--c:var(--g)">Familiar ${st.familiar}</span>
+        <span style="--c:#e9b44c">Learning ${st.learning}</span>
+        <span style="--c:#d7dbd1">New ${st.new}</span>
+      </div>
+      <h3 style="margin-top:16px">Coming up</h3>
+      <div class="fc">${fc.map((v,k) => { const d = new Date(Date.now()+k*864e5); return `<div><small>${v||''}</small><i style="height:${Math.round(v/fmax*60)}px"></i>${k===0?'Today':wd[d.getDay()]}</div>`; }).join('')}</div>
+    </div>
+    <div class="card">
+      <h3>Why this works</h3>
+      <ul class="tips small">
+        <li><b>Recall, don’t reread.</b> Trying to remember a word (even if it is hard) makes it stick much better than looking at a list.</li>
+        <li><b>Little and often.</b> 10 minutes a day beats one hour the night before the test. The app shows each word just before you would forget it.</li>
+        <li><b>Be honest.</b> Press “Again” if you didn’t know it – then the app brings the word back sooner.</li>
+      </ul>
+    </div>`;
+}
+
+/* ===================== Session ===================== */
+function startSession(setId){
+  touchDaily();
+  const t = dayNum();
+  let reviews, news;
+  const left = Math.max(0, DB.settings.newPerDay - DB.daily.newCount);
+  if(setId){
+    const inSet = cards().filter(c => c.set===setId);
+    reviews = shuffle(inSet.filter(c => c.reps)).slice(0, 25);
+    news = inSet.filter(c => !c.reps).sort((a,b)=>a.n-b.n).slice(0, Math.max(left, 5));
+  } else {
+    const act = activeCards();
+    // most-at-risk first, shuffled within each round so sets stay mixed
+    const rv = act.filter(c => c.reps && c.due <= t).sort((a,b) => retr(t-a.last,a.s) - retr(t-b.last,b.s));
+    const rs = DB.settings.roundSize; reviews = [];
+    for(let k=0;k<rv.length;k+=rs) reviews.push(...shuffle(rv.slice(k,k+rs)));
+    news = newPlan().list;
+  }
+  if(!reviews.length && !news.length){ toast('Nothing to practise here yet.'); return; }
+  const seq = []; let ri = 0;
+  const per = news.length ? Math.min(2, Math.floor(reviews.length/(news.length+1))) : 0; // new words early, so they are met even if the learner stops after round 1
+  for(const c of news){ for(let k=0;k<per && ri<reviews.length;k++) seq.push({id:reviews[ri++].id, kind:'test'}); seq.push({id:c.id, kind:'intro'}); }
+  while(ri < reviews.length) seq.push({id:reviews[ri++].id, kind:'test'});
+  for(const c of news){ const idx = seq.findIndex(x => x.id===c.id && x.kind==='intro'); seq.splice(Math.min(seq.length, idx+4), 0, {id:c.id, kind:'test'}); }
+  SESSION = {q:seq, i:0, rated:{}, counts:{1:0,2:0,3:0,4:0}, newCount:0, answered:false, inRound:0, round:1, pause:false, roundStart:{1:0,2:0,3:0,4:0}};
+  VIEW = 'session'; render(); window.scrollTo(0,0);
+}
+function canMode(c, m){
+  if(m==='mc') return !!mcOptions(c);
+  if(m==='def') return !!c.def;
+  if(m==='gap') return !!gapInfo(c);
+  if(m==='type') return !!c.de;
+  return true;
+}
+function pickMode(c){
+  // a mode chosen on the start page applies to every card, new words included
+  const f = DB.settings.mode;
+  if(f !== 'smart') return canMode(c,f) ? f : (canMode(c,'type') ? 'type' : 'flash');
+  if(!c.reps) return canMode(c,'mc') ? 'mc' : 'flash';
+  const s = c.s || 0; let o;
+  if(s < 4) o = ['flash','flash','mc'];
+  else if(s < 12) o = ['type','type','def','flash'];
+  else o = ['gap','gap','type','def','def','sentence'];
+  o = o.filter(m => canMode(c,m)); if(!o.length) o = ['flash'];
+  return pick(o);
+}
+const _mcCache = {};
+function mcOptions(c){
+  if(_mcCache[c.id] && _mcCache[c.id].v === c.de) return _mcCache[c.id].o;
+  if(!c.de) return null;
+  const pool = cards().filter(x => x.id!==c.id && x.de);
+  const same = shuffle(pool.filter(x => x.set===c.set)), other = shuffle(pool.filter(x => x.set!==c.set));
+  const seen = new Set([norm(c.de)]), picks = [];
+  for(const x of [...same, ...other]){ if(picks.length>=3) break; const k = norm(x.de); if(seen.has(k)) continue; seen.add(k); picks.push(x.de); }
+  const o = picks.length >= 2 ? shuffle([c.de, ...picks]) : null;
+  _mcCache[c.id] = {v:c.de, o}; return o;
+}
+const MODE_LABEL = {flash:'Flashcard', mc:'Multiple choice', type:'Type the English word', def:'Definition → word', gap:'Complete the sentence', sentence:'Write your own sentence'};
+
+function cur(){ return SESSION.q[SESSION.i]; }
+function viewSession(){
+  if(!SESSION){ go('today'); return; }
+  if(SESSION.i >= SESSION.q.length){ viewDone(); return; }
+  if(SESSION.pause){ viewRound(); return; }
+  const it = cur(), c = DB.cards[it.id];
+  if(!c){ SESSION.i++; viewSession(); return; }
+  const pct = Math.round(SESSION.i / SESSION.q.length * 100);
+  let body = '';
+  if(it.kind === 'intro') body = introHTML(c);
+  else{
+    if(!it.mode){
+      const fm = DB.settings.mode;
+      it.mode = it.kind==='practice'
+        ? (fm !== 'smart' && fm !== 'sentence' && canMode(c,fm) ? fm : (canMode(c,'mc') && (c.reps||0) <= 1 ? 'mc' : 'flash'))
+        : pickMode(c);
+      if(it.mode==='flash') it.dir = (!c.reps || (c.s||0) < 4 || it.kind==='practice') ? 'en' : pick(['en','de']);
+      if(it.mode==='mc') it.opts = shuffle(mcOptions(c));
+    }
+    if(it.mode==='mc' && !it.opts){ const o = mcOptions(c); if(o) it.opts = shuffle(o); else it.mode = 'flash'; }
+    if(it.mode==='flash' && !it.dir) it.dir = 'en';
+    body = ({flash:flashHTML, mc:mcHTML, type:typeHTML, def:typeHTML, gap:gapHTML, sentence:sentenceHTML})[it.mode](c, it);
+  }
+  app.innerHTML = `
+    <div class="sess-top">
+      <button class="btn ghost sm" onclick="endSession()">✕ End</button>
+      <div class="prog"><i style="width:${pct}%"></i></div>
+      <span class="small muted">${SESSION.i}/${SESSION.q.length}</span>
+    </div>
+    <div class="qcard">${body}</div>`;
+  const inp = document.getElementById('ans'); if(inp && !SESSION.answered) inp.focus({preventScroll:true});
+}
+function endSession(){
+  if(SESSION.type==='prep'){ SESSION.q = SESSION.q.slice(0, SESSION.i); render(); return; }
+  const done = Object.keys(SESSION.rated).length;
+  if(done && SESSION.i < SESSION.q.length){ SESSION.q = SESSION.q.slice(0, SESSION.i); }
+  if(!done){ go('today'); return; }
+  render();
+}
+function modeHead(it, extra){
+  const lab = it.kind==='intro' ? 'New word' : it.kind==='practice' ? 'Try again · ' + MODE_LABEL[it.mode]
+    : it.kind==='prep' ? (it.check ? '🎯 Check · ' : '🎯 Test prep · ') + MODE_LABEL[it.mode] : MODE_LABEL[it.mode];
+  return `<div class="mode">${lab}${extra||''}</div>`;
+}
+function detailsHTML(c){
+  return `<div class="row" style="align-items:flex-start"><div style="flex:1">
+      <div style="font-size:1.3rem;font-weight:800">${esc(headword(c.en))} <span class="wc">${esc(wordClass(c.en))}</span></div>
+      <div style="font-weight:600">${esc(c.de||'')}</div>
+      ${c.def ? `<div class="muted">${esc(c.def)}</div>` : ''}
+    </div>${speakBtn(c)}</div>
+    ${c.ex ? `<div class="ex">${exHTML(c)}</div>` : ''}`;
+}
+function introHTML(c){
+  return `${modeHead({kind:'intro'})}
+    <div class="row"><div class="prompt" style="flex:1">${esc(headword(c.en))} <span class="wc">${esc(wordClass(c.en))}</span></div>${speakBtn(c)}</div>
+    <div style="font-size:1.25rem;font-weight:700;color:#2d3a12;margin-bottom:6px">${esc(c.de||'')}</div>
+    ${c.def ? `<div class="muted" style="font-size:1.05rem">${esc(c.def)}</div>` : ''}
+    ${c.ex ? `<div class="ex">${exHTML(c)}</div>` : ''}
+    <p class="small muted">Read it, say it out loud, and think of a situation where you would use it. You will be asked in a moment.</p>
+    <div class="actions"><button class="btn primary big" id="nextbtn" onclick="introDone()">Got it →</button></div>`;
+}
+function introDone(){
+  touchDaily(); if(SESSION.type!=='prep') DB.daily.newCount++; SESSION.newCount++; save();
+  advance();
+}
+function advance(){
+  SESSION.answered = false; SESSION.i++; SESSION.inRound++;
+  if(SESSION.inRound >= DB.settings.roundSize && SESSION.i < SESSION.q.length) SESSION.pause = true;
+  viewSession(); window.scrollTo(0,0);
+}
+function viewRound(){
+  const c = SESSION.counts, c0 = SESSION.roundStart;
+  const n = [1,2,3,4].reduce((a,g) => a + c[g]-c0[g], 0), ok = n - (c[1]-c0[1]);
+  const left = SESSION.q.length - SESSION.i;
+  app.innerHTML = `<div class="qcard done-hero">
+    <div class="emoji">✅</div>
+    <h2>Round ${SESSION.round} done</h2>
+    <p class="muted">${n ? `${ok} of ${n} remembered (${Math.round(ok/n*100)} %)` : 'Well done!'}</p>
+    <p>${left} card${left===1?'':'s'} left today (≈ ${Math.max(1,Math.round(left*0.25))} min).</p>
+    <p class="small muted">${SESSION.type==='prep' ? 'Stopping now is fine – your test prep progress is saved for every word.' : 'Stopping now is fine – the most important words came first. The rest waits for you.'}</p>
+    <div class="actions">
+      <button class="btn ghost big" onclick="endSession()">Stop for today</button>
+      <button class="btn primary big" id="nextbtn" onclick="nextRound()">Next round →</button>
+    </div></div>`;
+}
+function nextRound(){ SESSION.pause = false; SESSION.inRound = 0; SESSION.round++; SESSION.roundStart = Object.assign({}, SESSION.counts); viewSession(); window.scrollTo(0,0); }
+/* --- flashcard --- */
+function flashHTML(c, it){
+  const front = it.dir==='en'
+    ? `<div class="row"><div class="prompt" style="flex:1">${esc(headword(c.en))} <span class="wc">${esc(wordClass(c.en))}</span></div>${speakBtn(c)}</div><p class="muted">What does it mean? Say it in your head, then check.</p>`
+    : `<div class="prompt de">${esc(c.de||c.def)}</div><p class="muted">What’s the English word${wordClass(c.en)?' ('+esc(wordClass(c.en))+')':''}? Say it in your head, then check.</p>`;
+  if(!SESSION.answered) return `${modeHead(it)}${front}<div class="actions"><button class="btn primary big" id="nextbtn" onclick="SESSION.answered=true;viewSession()">Show answer</button></div>`;
+  let btns;
+  if(it.kind==='test' && !SESSION.rated[c.id]){
+    const lab = [1,2,3,4].map(g => ivlLabel(nextState(c,g).due - dayNum()));
+    btns = `<p class="small muted" style="margin:14px 0 0">How well did you know it?</p><div class="rate">
+      <button class="r1" onclick="rate(1)">Again<small>${lab[0]}</small></button>
+      <button class="r2" onclick="rate(2)">Hard<small>${lab[1]}</small></button>
+      <button class="r3" onclick="rate(3)">Good<small>${lab[2]}</small></button>
+      <button class="r4" onclick="rate(4)">Easy<small>${lab[3]}</small></button></div>`;
+  } else {
+    btns = `<div class="actions"><button class="btn danger" onclick="rate(1)">Didn’t know it</button><button class="btn primary" onclick="rate(3)">Knew it</button></div>`;
+  }
+  return `${modeHead(it)}${front}<div class="fb ok" style="background:#fff">${detailsHTML(c)}</div>${btns}`;
+}
+/* --- multiple choice --- */
+function mcHTML(c, it){
+  const opts = it.opts || [];
+  const done = SESSION.answered;
+  return `${modeHead(it)}
+    <div class="row"><div class="prompt" style="flex:1">${esc(headword(c.en))} <span class="wc">${esc(wordClass(c.en))}</span></div>${speakBtn(c)}</div>
+    <div class="opts">${opts.map((o,k) => {
+      let cls = ''; if(done){ if(o===c.de) cls='right'; else if(k===it.chosen) cls='wrong'; }
+      return `<button class="opt ${cls}" ${done?'disabled':''} onclick="mcAnswer(${k})">${esc(o)}</button>`; }).join('')}</div>
+    ${done ? feedbackHTML(c, it) : ''}`;
+}
+function mcAnswer(k){
+  const it = cur(), c = DB.cards[it.id];
+  it.chosen = k; it.result = it.opts[k]===c.de ? 'ok' : 'wrong';
+  finishAuto(it, c);
+}
+/* --- typing / definition --- */
+function typeHTML(c, it){
+  const isDef = it.mode==='def';
+  const prompt = isDef
+    ? `<div class="prompt def">${esc(c.def)}</div><p class="muted">Type the English word${wordClass(c.en)?' ('+esc(wordClass(c.en))+')':''}.</p>`
+    : `<div class="prompt de">${esc(c.de)}</div><p class="muted">Type the English word${wordClass(c.en)?' ('+esc(wordClass(c.en))+')':''}.</p>`;
+  return `${modeHead(it)}${prompt}${inputBlock(c, it)}`;
+}
+function hintFor(c){ const v = variants(c.en)[0] || ''; return v.split(' ').map(w => w[0] + w.slice(1).replace(/[a-z'’-]/gi,'_')).join('  '); }
+function inputBlock(c, it){
+  const done = SESSION.answered;
+  return `<input id="ans" class="answer-in" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" ${done?'disabled':''} value="${esc(it.typed||'')}" placeholder="your answer" onkeydown="if(event.key==='Enter'){event.preventDefault();checkTyped()}">
+    ${it.hint && !done ? `<p class="small" style="margin-top:6px">Hint: <b style="letter-spacing:.12em">${esc(hintFor(c))}</b></p>` : ''}
+    ${done ? feedbackHTML(c, it) : `<div class="actions">
+      <button class="btn ghost" onclick="giveUp()">I don’t know</button>
+      ${it.hint ? '' : '<button class="btn ghost" onclick="cur().hint=true;cur().typed=document.getElementById(\'ans\').value;viewSession()">Hint</button>'}
+      <button class="btn primary" onclick="checkTyped()">Check</button></div>`}`;
+}
+function checkTyped(){
+  const it = cur(), c = DB.cards[it.id], v = document.getElementById('ans').value;
+  if(!v.trim()){ toast('Type an answer – or tap “I don’t know”.'); return; }
+  it.typed = v;
+  if(it.mode==='gap'){
+    const g = gapInfo(c);
+    const r1 = grade(v, [norm(g.answer)]);
+    if(r1==='ok') it.result = 'ok';
+    else if(grade(v, variants(c.en))==='ok'){ it.result = 'ok'; it.note = `Right word! In this sentence the form is “${g.answer}”.`; }
+    else it.result = r1==='typo' ? 'typo' : grade(v, variants(c.en))==='typo' ? 'typo' : 'wrong';
+  } else it.result = grade(v, variants(c.en));
+  if(it.result==='ok' && it.hint) it.result = 'hint';
+  finishAuto(it, c);
+}
+function giveUp(){ const it = cur(); it.typed = ''; it.result = 'wrong'; finishAuto(it, DB.cards[it.id]); }
+/* --- gap --- */
+function gapHTML(c, it){
+  const g = gapInfo(c);
+  return `${modeHead(it)}
+    <div class="gapline">${esc(g.before)}<span class="gap">${SESSION.answered ? esc(g.answer) : '?'}</span>${esc(g.after)}</div>
+    <p class="muted">Hint: ${esc(c.de || c.def)}</p>
+    ${inputBlock(c, it)}`;
+}
+/* --- own sentence --- */
+function sentenceHTML(c, it){
+  const done = SESSION.answered;
+  return `${modeHead(it)}
+    ${detailsHTML(c)}
+    <p style="font-weight:600">Write your own sentence with <b>${esc(headword(c.en))}</b> – ideally about your life, your school or the topic.</p>
+    <textarea id="ans" class="prose" ${done?'disabled':''} placeholder="My sentence …">${esc(it.typed||'')}</textarea>
+    ${done ? `<div class="fb ok"><h4>Saved ✓</h4><div class="small">You can find all your sentences under <b>My sentences</b> – show them to your teacher.</div></div>
+      <div class="actions"><button class="btn primary big" id="nextbtn" onclick="nextItem()">Next →</button></div>`
+    : `<div class="actions"><button class="btn ghost" onclick="skipSentence()">Skip</button><button class="btn primary" onclick="saveSentence()">Save sentence</button></div>`}`;
+}
+function skipSentence(){ const it = cur(); it.result='wrong'; if(it.kind==='test' && !SESSION.rated[it.id]){ applyRating(DB.cards[it.id],1); SESSION.rated[it.id]=1; SESSION.counts[1]++; } nextItem(); }
+function saveSentence(){
+  const it = cur(), c = DB.cards[it.id], v = document.getElementById('ans').value.trim();
+  if(v.split(/\s+/).length < 4){ toast('Write a full sentence (at least 4 words).'); return; }
+  const stems = variants(c.en).map(x => x.length>4 ? x.slice(0,-1) : x);
+  const low = v.toLowerCase();
+  if(!stems.some(s => low.includes(s.split(' ')[0]))){ toast(`Use the word “${headword(c.en)}” in your sentence.`); return; }
+  it.typed = v;
+  DB.sentences.unshift({id:uid(), card:c.id, word:headword(c.en), text:v, day:dayNum()});
+  it.result = 'ok'; SESSION.answered = true;
+  afterAnswer(it, c, 3);
+}
+/* --- feedback + rating --- */
+function feedbackHTML(c, it){
+  const r = it.result;
+  const cls = r==='ok' ? 'ok' : (r==='typo'||r==='hint') ? 'mid' : 'bad';
+  const title = r==='ok' ? pick(['Correct! ✓','Well done! ✓','Yes! ✓']) : r==='typo' ? 'Almost – check the spelling' : r==='hint' ? 'Correct (with hint)' : (it.mode==='mc' ? 'Not quite' : 'The answer is:');
+  return `<div class="fb ${cls}"><h4>${title}</h4>${it.note ? `<p class="small">${esc(it.note)}</p>` : ''}${detailsHTML(c)}</div>
+    <div class="actions"><button class="btn primary big" id="nextbtn" onclick="nextItem()">Next →</button></div>
+    <div class="kbd" style="text-align:center;margin-top:6px">${r==='wrong' ? 'This word will come back soon.' : ''}</div>`;
+}
+function finishAuto(it, c){
+  SESSION.answered = true;
+  const g = it.result==='ok' ? 3 : (it.result==='typo'||it.result==='hint') ? 2 : 1;
+  afterAnswer(it, c, g);
+}
+function afterAnswer(it, c, g){
+  if(it.kind==='prep'){ prepAnswer(it, c, g); return; }
+  if(it.kind==='test' && !SESSION.rated[c.id]){
+    applyRating(c, g); SESSION.rated[c.id] = g; SESSION.counts[g]++;
+  }
+  if(g===1){
+    const tries = (it.tries||0) + 1;
+    if(tries <= 2) SESSION.q.splice(Math.min(SESSION.q.length, SESSION.i+4), 0, {id:c.id, kind:'practice', tries});
+  }
+  if(it.mode==='flash'){ nextItem(); return; }
+  viewSession();
+  const nb = document.getElementById('nextbtn'); if(nb) nb.focus({preventScroll:true});
+}
+function rate(g){ const it = cur(); afterAnswer(it, DB.cards[it.id], g); }
+function nextItem(){ advance(); }
+document.addEventListener('keydown', e => {
+  if(e.defaultPrevented || VIEW!=='session' || !SESSION || document.getElementById('modal-root').innerHTML) return;
+  const it = cur(); if(!it) return;
+  if(e.key==='Enter' && document.activeElement && document.activeElement.id!=='ans'){
+    const nb = document.getElementById('nextbtn'); if(nb){ e.preventDefault(); nb.click(); }
+  }
+  if(it.mode==='flash' && SESSION.answered && ['1','2','3','4'].includes(e.key) && it.kind==='test' && !SESSION.rated[it.id]) rate(+e.key);
+  if(it.mode==='mc' && !SESSION.answered && ['1','2','3','4'].includes(e.key) && it.opts && it.opts[+e.key-1]) mcAnswer(+e.key-1);
+});
+function viewDone(){
+  if(SESSION.type==='prep'){ viewPrepDone(); return; }
+  const n = Object.keys(SESSION.rated).length, ct = SESSION.counts;
+  const right = ct[2]+ct[3]+ct[4];
+  const t = dayNum();
+  const stillDue = dueCount() + newAvailable();
+  const tomorrow = activeCards().filter(c => c.reps && c.due === t+1).length;
+  app.innerHTML = `<div class="qcard done-hero">
+    <div class="emoji">🎉</div>
+    <h2>Session complete</h2>
+    <p class="muted">${n} words practised · ${SESSION.newCount} new · ${n ? Math.round(right/n*100) : 0}% remembered</p>
+    <div class="stats">
+      <div class="stat"><b>${ct[3]+ct[4]}</b><span>knew it</span></div>
+      <div class="stat"><b>${ct[2]}</b><span>hard</span></div>
+      <div class="stat"><b>${ct[1]}</b><span>again</span></div>
+    </div>
+    <p>${stillDue ? `Still open today: <b>${stillDue}</b> cards.` : tomorrow ? `Tomorrow: <b>${tomorrow}</b> words are waiting for you.` : 'See you tomorrow!'} Streak: <b>${streak()} day${streak()===1?'':'s'}</b>.</p>
+    <div class="actions">${stillDue ? `<button class="btn ghost big" onclick="startSession()">One more round</button>` : ''}<button class="btn primary big" onclick="go('today')">Back to start</button></div>
+  </div>`;
+}
+
+/* ===================== Test prep (Ausfrage) =====================
+   Successive relearning: 1) learn every word to criterion (2 correct recalls in a row,
+   the last one productive: type the English word); 2) after >= 3 hours (e.g. evening,
+   next morning) a check round: each word is recalled once; missed words are relearned
+   to criterion. Only a word's first answer of the day goes into FSRS, so the drill does
+   not distort long-term scheduling. */
+const PREP_GAP_H = 3;
+function prepKey(set){ return set.test != null ? set.test : 'open'; }
+function prepOf(c){ const k = prepKey(DB.sets[c.set]); if(!c.prep || c.prep.test !== k) c.prep = {test:k, n:0, t:0}; return c.prep; }
+function prepScope(key){
+  key = String(key);
+  if(key[0]==='g'){ const d = +key.slice(1), g = testGroups().find(x => x.test===d); return {key, name: g ? g.name : 'Test', test:d, lists: g ? g.sets.length : 0, list: groupCards(d)}; }
+  const s = DB.sets[key]; return {key, name:s.name, test:s.test, lists:1, list:cards().filter(c => c.set===key)};
+}
+function cardDay(ms){ return Math.floor((ms - new Date(ms).getTimezoneOffset()*6e4)/864e5); }
+function prepDue(c){
+  const p = prepOf(c); if(p.n === 0) return 'learn';
+  return (Date.now() - p.t >= PREP_GAP_H*36e5 || dayNum() > cardDay(p.t)) ? 'check' : null;
+}
+function prepStatus(key){
+  const list = prepScope(key).list, gap = PREP_GAP_H*36e5;
+  let learned = 0, checked = 0, ready = 0, next = null;
+  list.forEach(c => { const p = prepOf(c), d = prepDue(c);
+    if(p.n >= 1) learned++; if(p.n >= 2) checked++;
+    if(d) ready++; else { const at = p.t + gap; if(next == null || at < next) next = at; } });
+  return {total:list.length, learned, checked, ready, next};
+}
+function prepLearnMode(c, streak){
+  if(streak >= 1) return canMode(c,'type') ? 'type' : 'def';
+  return (c.reps||0) <= 1 && mcOptions(c) ? 'mc' : 'flash';
+}
+function startPrep(key){
+  touchDaily();
+  const sc = prepScope(key), t = dayNum();
+  const weak = (a,b) => (a.reps ? retr(t-a.last, a.s) : -1) - (b.reps ? retr(t-b.last, b.s) : -1);
+  const learn = sc.list.filter(c => prepDue(c)==='learn').sort(weak);
+  const check = sc.list.filter(c => prepDue(c)==='check').sort(weak);
+  if(!learn.length && !check.length){ const st = prepStatus(key); toast(st.next ? 'Next check round from ' + new Date(st.next).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : 'Nothing to do.'); return; }
+  const rs = DB.settings.roundSize, blocks = arr => { const o = []; for(let k=0;k<arr.length;k+=rs) o.push(...shuffle(arr.slice(k,k+rs))); return o; };
+  const seq = blocks(check).map(c => ({id:c.id, kind:'prep', check:true, mode: canMode(c,'type') ? 'type' : 'def'}));
+  const streak = {};
+  for(const c of blocks(learn)){
+    if(!c.reps){ seq.push({id:c.id, kind:'intro'}); streak[c.id] = 0; }
+    else { streak[c.id] = (c.s||0) >= 7 ? 1 : 0; seq.push({id:c.id, kind:'prep', mode: prepLearnMode(c, streak[c.id])}); }
+  }
+  for(const c of learn.filter(c => !c.reps)){ const idx = seq.findIndex(x => x.id===c.id && x.kind==='intro'); seq.splice(Math.min(seq.length, idx+3), 0, {id:c.id, kind:'prep', mode: prepLearnMode(c, 0)}); }
+  SESSION = {type:'prep', key:sc.key, q:seq, i:0, rated:{}, counts:{1:0,2:0,3:0,4:0}, newCount:0, answered:false, inRound:0, round:1, pause:false, roundStart:{1:0,2:0,3:0,4:0}, streak, stats:{ok:0, all:0}, reached:0, checkOk:0, checkAll:check.length};
+  VIEW = 'session'; render(); window.scrollTo(0,0);
+}
+function prepAnswer(it, c, g){
+  // FSRS: only the first answer of the day counts
+  if(!SESSION.rated[c.id] && c.last !== dayNum()){ applyRating(c, g); SESSION.counts[g]++; }
+  SESSION.rated[c.id] = SESSION.rated[c.id] || g;
+  const p = prepOf(c), st = SESSION.streak;
+  SESSION.stats.all++; if(g >= 3) SESSION.stats.ok++;
+  const requeue = mode => { const gap = 3 + Math.floor(Math.random()*3); SESSION.q.splice(Math.min(SESSION.q.length, SESSION.i+gap), 0, {id:c.id, kind:'prep', mode}); };
+  if(it.check){
+    if(g >= 3){ p.n++; p.t = Date.now(); SESSION.checkOk++; }
+    else { st[c.id] = g===2 ? 1 : 0; requeue(prepLearnMode(c, st[c.id])); }
+  } else {
+    const productive = ['type','def','gap'].includes(it.mode);
+    if(g >= 3){
+      st[c.id] = (st[c.id]||0) + 1;
+      if(st[c.id] >= 2 && productive){ p.n = Math.max(1, p.n); p.t = Date.now(); SESSION.reached++; }
+      else requeue(prepLearnMode(c, st[c.id]));
+    } else { st[c.id] = g===2 ? Math.max(1, st[c.id]||0) : 0; requeue(prepLearnMode(c, st[c.id])); }
+  }
+  save();
+  if(it.mode==='flash'){ nextItem(); return; }
+  viewSession();
+  const nb = document.getElementById('nextbtn'); if(nb) nb.focus({preventScroll:true});
+}
+function prepPanel(key){
+  const sc = prepScope(key), st = prepStatus(key);
+  const nextTxt = st.next ? new Date(st.next).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '';
+  const step1 = st.learned >= st.total, step2 = st.checked >= st.total;
+  const t0 = dayNum(), rdy = sc.list.filter(c => prepDue(c));
+  const mins = Math.max(1, Math.round(rdy.reduce((m,c) => m + (prepDue(c)==='check' ? 0.2 : !c.reps ? 0.8 : (c.s||0) >= 7 ? 0.25 : 0.5), 0)));
+  const rs = DB.settings.roundSize;
+  return `<div class="card tint">
+    <div class="spread"><h3 style="margin:0">🎯 Test prep: ${esc(sc.name)}</h3>${sc.test != null ? `<span class="small"><b>${fmtDay(sc.test)}</b> (${inDays(sc.test)})</span>` : ''}</div>
+    ${sc.lists > 1 ? `<p class="small muted" style="margin:4px 0 0">${sc.lists} lists · ${st.total} words</p>` : ''}
+    <ul class="tips small" style="margin-top:8px;list-style:none;padding-left:0">
+      <li>${step1 ? '✅' : '⬜'} <b>Learn</b> every word until you can type it (new or weak words: twice in a row): <b>${st.learned}/${st.total}</b></li>
+      <li>${step2 ? '✅' : '⬜'} <b>Check</b> at least 3 hours later – each word once, only mistakes are practised again: <b>${st.checked}/${st.total}</b></li>
+    </ul>
+    ${st.ready ? `<button class="btn primary block" onclick="startPrep('${sc.key}')">${st.learned < st.total ? 'Learn' : 'Check'} now · ${st.ready > rs ? `round of ${rs} (${st.ready} words open, ≈ ${mins} min in total)` : `${st.ready} word${st.ready===1?'':'s'} (≈ ${mins} min)`}</button>`
+      : `<p class="small" style="margin:0">${step2 ? 'Ready for the test 💪 – one more check right before class does not hurt.' : `Next check from <b>${nextTxt}</b>. Sleep helps your memory!`}</p>`}
+    ${sc.lists > 1 && sc.test - dayNum() > 3 ? `<p class="small muted" style="margin:8px 0 0">Tip: spread it out – e.g. learn a few lists per day this week, then check everything 1–2 days before the test.</p>` : ''}
+  </div>`;
+}
+function viewPrepDone(){
+  const S = SESSION, sc = prepScope(S.key), st = prepStatus(S.key);
+  const nextTxt = st.next ? new Date(st.next).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '';
+  app.innerHTML = `<div class="qcard done-hero">
+    <div class="emoji">🎯</div>
+    <h2>Test prep: ${esc(sc.name)}</h2>
+    <p class="muted">${S.stats.all} answers · ${S.stats.all ? Math.round(S.stats.ok/S.stats.all*100) : 0} % correct${S.checkAll ? ` · check: ${S.checkOk} remembered at first try` : ''}</p>
+    <div class="stats">
+      <div class="stat"><b>${st.learned}/${st.total}</b><span>learned</span></div>
+      <div class="stat"><b>${st.checked}/${st.total}</b><span>checked later</span></div>
+      <div class="stat"><b>${st.total - st.learned}</b><span>still to learn</span></div>
+    </div>
+    <p>${st.learned < st.total ? 'Some words are not learned yet – continue when you are ready.'
+      : st.checked < st.total ? `Great! Now take a break. <b>Check round from ${nextTxt}</b> – e.g. this evening or tomorrow morning before class.`
+      : 'Ready for the test 💪'}</p>
+    <p class="small muted">After the test the words stay in your daily practice, so you will still know them for the exam.</p>
+    <div class="actions">${st.ready && st.learned < st.total ? `<button class="btn ghost big" onclick="startPrep('${S.key}')">Continue</button>` : ''}<button class="btn primary big" onclick="go('today')">Back to start</button></div>
+  </div>`;
+}
+
+/* ===================== My words ===================== */
+let wordSearch = '';
+function viewWords(){
+  const sets = Object.values(DB.sets).sort((a,b)=>a.created-b.created);
+  const q = norm(wordSearch);
+  app.innerHTML = `
+    <div class="spread" style="margin-bottom:12px"><h2 style="margin:0">My words</h2>
+      <div class="row"><button class="btn ghost sm" onclick="go('dict')">📖 Dictionary</button><button class="btn ghost sm" onclick="newSetModal()">+ New set</button><button class="btn primary sm" onclick="go('import')">Import</button></div></div>
+    <input type="search" placeholder="Search words …" value="${esc(wordSearch)}" oninput="wordSearch=this.value;clearTimeout(window._ws);window._ws=setTimeout(()=>{viewWords();const s=document.querySelector('input[type=search]');s.focus();s.setSelectionRange(s.value.length,s.value.length)},250)" style="margin-bottom:14px">
+    ${sets.length ? '' : `<div class="card"><p>No words yet. Import a list to get started – or try the app with the demo list.</p><div class="row"><button class="btn primary sm" onclick="go('import')">Import</button><button class="btn ghost sm" onclick="loadDemo()">Load demo list</button></div></div>`}
+    ${sets.map(s => {
+      let list = cards().filter(c => c.set===s.id).sort((a,b)=>a.n-b.n);
+      const total = list.length;
+      const st = {new:0,learning:0,familiar:0,mastered:0}; list.forEach(c => st[stage(c)]++);
+      if(q) list = list.filter(c => norm(c.en).includes(q) || norm(c.de||'').includes(q));
+      if(q && !list.length) return '';
+      const N = total || 1;
+      return `<div class="card">
+        <div class="spread">
+          <div><h3 style="margin:0">${esc(s.name)}${s.demo ? ' <span class="tag st-new">Demo</span>' : ''}</h3><span class="small muted">${total} words · ${st.mastered+st.familiar} known · ${s.active ? 'in daily practice' : 'paused'}</span>
+            ${s.test != null ? `<div class="small" style="margin-top:2px">📅 ${esc(s.testName||'Test')} ${fmtDay(s.test)}${s.test >= dayNum() ? ' ('+inDays(s.test)+')' : ' (over)'}</div>` : ''}</div>
+          <label class="toggle" title="Include in daily practice"><input type="checkbox" ${s.active?'checked':''} onchange="DB.sets['${s.id}'].active=this.checked;save();viewWords()"><span></span></label>
+        </div>
+        <div class="bar" style="margin-top:10px">
+          <i style="width:${st.mastered/N*100}%;background:var(--g-dark)"></i><i style="width:${st.familiar/N*100}%;background:var(--g)"></i><i style="width:${st.learning/N*100}%;background:#e9b44c"></i>
+        </div>
+        ${s.demo ? `<p class="small muted" style="margin:10px 0 0">Practice list to try the app: every task type works with it. <b>Restart demo</b> sets all 12 words back to “new”; <b>Try test prep</b> pretends there is a vocab test tomorrow.</p>
+          <div class="row" style="margin-top:8px"><button class="btn ghost sm" onclick="loadDemo()">↺ Restart demo</button><button class="btn ghost sm" onclick="demoTestTomorrow()">🎯 Try test prep</button></div>` : ''}
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary sm" onclick="startSession('${s.id}')">Practise this set</button>
+          <button class="btn ghost sm" onclick="startPrep('${s.id}')">🎯 Test prep</button>
+          <button class="btn ghost sm" onclick="editWord(null,'${s.id}')">+ Word</button>
+          <button class="btn ghost sm" onclick="copyText(exportSet('${s.id}'),'Set code copied – paste it under Import on another device.')">Share code</button>
+          <button class="btn ghost sm" onclick="testDateModal('${s.id}')">📅 Test date</button>
+          <button class="btn ghost sm" onclick="renameSet('${s.id}')">Rename</button>
+          <button class="btn danger sm" onclick="askDeleteSet('${s.id}')">Delete</button>
+        </div>
+        <details ${q?'open':''}><summary>Show words</summary>
+          <ul class="wl">${list.map(c => `<li onclick="editWord('${c.id}')"><div class="w"><b>${esc(headword(c.en))}</b> <span class="small muted">${esc(wordClass(c.en))}</span><div>${esc(c.de||c.def||'')}</div></div>${stageTag(c)}<span class="due">${dueText(c)}</span></li>`).join('')}</ul>
+        </details>
+      </div>`; }).join('')}`;
+}
+function askDeleteSet(id){ const n = cards().filter(c => c.set===id).length; confirmBox(`Delete the set “${esc(DB.sets[id].name)}” with all ${n} words and your progress?`, 'Delete', () => deleteSet(id)); }
+function deleteSet(id){ cards().filter(c => c.set===id).forEach(c => delete DB.cards[c.id]); delete DB.sets[id]; save(); toast('Set deleted'); viewWords(); }
+function newSetModal(){
+  modal(`<h3>New set</h3><label class="f">Name</label><input id="m-name" type="text" placeholder="e.g. U2 M1 Multiculturalism">
+    <div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="const n=document.getElementById('m-name').value.trim();if(!n)return;if(findSetByName(n)){toast('This set exists already.');return;}const id=uid();DB.sets[id]={id,name:n,active:true,created:Date.now()};save();closeModal();editWord(null,id)">Create</button></div>`);
+  document.getElementById('m-name').focus();
+}
+function testDateModal(id){
+  const s = DB.sets[id], others = Object.values(DB.sets).sort((a,b)=>a.created-b.created);
+  modal(`<h3>Test date</h3>
+    <p class="small muted">Lists with the same date form one test (e.g. all lists for a Schulaufgabe). Words that would not be reviewed in time are brought forward, unlearned words come first, and Test prep appears on the start page (3 days before, 7 days before for big tests).</p>
+    <label class="f">Date</label><input id="m-date" type="date" value="${s.test != null ? dayToIso(s.test) : ''}">
+    <label class="f">Name of the test</label><input id="m-tname" type="text" placeholder="e.g. Ausfrage, 1. Schulaufgabe" value="${esc(s.testName||'')}">
+    <label class="f">Lists in this test</label>
+    <div style="max-height:220px;overflow:auto;border:1.5px solid var(--line);border-radius:10px;padding:6px 10px">
+      ${others.map(o => `<label class="row small" style="padding:4px 0;cursor:pointer"><input type="checkbox" class="m-set" value="${o.id}" ${o.id===id || (s.test != null && o.test===s.test) ? 'checked' : ''}> ${esc(o.name)}${o.test != null && o.test!==s.test ? ` <span class="muted">(${fmtDay(o.test)})</span>` : ''}</label>`).join('')}
+    </div>
+    <div class="actions">
+      ${s.test != null ? `<button class="btn ghost" onclick="removeTest('${id}')">Remove</button>` : ''}
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="saveTest('${id}')">Save</button>
+    </div>`);
+}
+function saveTest(id){
+  const d = isoToDay(document.getElementById('m-date').value); if(d == null){ toast('Pick a date.'); return; }
+  const name = document.getElementById('m-tname').value.trim();
+  const ids = [...document.querySelectorAll('.m-set:checked')].map(x => x.value);
+  const old = DB.sets[id].test;
+  // lists that were in this test before but are now unticked lose the date
+  if(old != null) Object.values(DB.sets).forEach(o => { if(o.test===old && !ids.includes(o.id)){ delete o.test; delete o.testName; } });
+  ids.forEach(sid => { const o = DB.sets[sid]; o.test = d; if(name) o.testName = name; else delete o.testName; retarget(sid); });
+  save(); closeModal(); toast(`Test date saved for ${ids.length} list${ids.length===1?'':'s'}`); render();
+}
+function removeTest(id){ delete DB.sets[id].test; delete DB.sets[id].testName; save(); closeModal(); render(); }
+function renameSet(id){
+  modal(`<h3>Rename set</h3><input id="m-name" type="text" value="${esc(DB.sets[id].name)}">
+    <div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="const n=document.getElementById('m-name').value.trim();if(n){DB.sets['${id}'].name=n;save();}closeModal();viewWords()">Save</button></div>`);
+}
+function editWord(id, setId){
+  const c = id ? DB.cards[id] : {en:'',de:'',def:'',ex:'',src:'', set:setId};
+  const f = (k, label, ph, ta) => `<label class="f">${label}</label>${ta ? `<textarea class="prose" id="m-${k}" style="min-height:60px" placeholder="${ph}">${esc(c[k]||'')}</textarea>` : `<input id="m-${k}" type="text" value="${esc(c[k]||'')}" placeholder="${ph}">`}`;
+  modal(`<h3>${id ? 'Edit word' : 'Add word to “'+esc(DB.sets[setId].name)+'”'}</h3>
+    ${f('en','English','e.g. to monitor sth (v.)')}
+    <div class="small" style="margin-top:4px"><a href="#" style="color:var(--g-dark);font-weight:700" onclick="this.href=oaldURL(document.getElementById('m-en').value);if(!norm(document.getElementById('m-en').value)){toast('Type the English word first.');return false}" target="_blank" rel="noopener">📖 Look it up in the Oxford Learner’s Dictionary</a></div>
+    ${f('de','German','e.g. überwachen')}
+    ${f('def','English explanation (optional)','to watch and check sth over a period of time', true)}
+    ${f('ex','Example sentence (optional)','Parents want to monitor their children’s screen time.', true)}
+    <p class="small muted" style="margin-top:8px">Tip: several correct answers? Separate them with “/”, e.g. <i>refund / reimbursement</i>.</p>
+    ${id ? `<p class="small muted">Status: ${stageTag(c)} · ${dueText(c)} · reviewed ${c.reps||0}×</p>` : ''}
+    <div class="actions">
+      ${id ? `<button class="btn danger" onclick="confirmBox('Delete this word?','Delete',()=>{delete DB.cards['${id}'];save();render()})">Delete</button>
+              <button class="btn ghost" onclick="Object.assign(DB.cards['${id}'],{reps:0,s:null,d:null,due:null,last:null,lapses:0});save();closeModal();toast('Progress reset');render()">Reset</button>` : ''}
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="saveWord(${id?`'${id}'`:'null'},'${c.set}')">Save</button>
+    </div>`);
+  document.getElementById('m-en').focus();
+}
+function saveWord(id, setId){
+  const v = k => document.getElementById('m-'+k).value.trim();
+  const w = {en:v('en'), de:v('de'), def:v('def'), ex:v('ex')};
+  if(!w.en || !(w.de || w.def)){ toast('Enter the English word and a German meaning or explanation.'); return; }
+  if(id) Object.assign(DB.cards[id], w);
+  else{ const nid = uid(); DB.cards[nid] = Object.assign({id:nid, set:setId, n:++DB.seq, reps:0}, w); }
+  save(); closeModal(); toast(id ? 'Saved' : 'Word added'); render();
+  if(!id) editWord(null, setId);
+}
+
+
+/* ===================== Dictionary (Oxford Learner's Dictionary + add to a list) ===================== */
+const OALD = 'https://www.oxfordlearnersdictionaries.com/search/english/?q=';
+const WCLS = [['n.','noun'],['v.','verb'],['adj.','adjective'],['adv.','adverb'],['phr. v.','phrasal verb'],['idiom','idiom'],['phr.','phrase']];
+const DICT_SET = 'My dictionary words';
+function lookupTerm(x){ return headword(x).replace(/\b(sth|sb|something|somebody|someone)\b/gi,' ').replace(/^to\s+/i,'').replace(/[\/;].*$/,'').replace(/\s+/g,' ').trim(); }
+function oaldURL(x){ return OALD + encodeURIComponent(lookupTerm(x)); }
+function dictState(){ if(!DB.dict) DB.dict = {draft:{q:'',en:'',cls:'',de:'',def:'',ex:''}, set:null, recent:[]}; return DB.dict; }
+function dictSave(){ const D = dictState(); ['q','en','de','def','ex'].forEach(k => { const el = document.getElementById('d-'+k); if(el) D.draft[k] = el.value; }); save(); }
+function dictLookup(){
+  const D = dictState(), q = document.getElementById('d-q').value.trim();
+  if(!q){ toast('Type a word first.'); return false; }
+  // the searched word goes into the form (unless the student already started a different word)
+  if(!D.draft.en || norm(D.draft.en) === norm(D.draft.q)) D.draft.en = q;
+  D.draft.q = q; save();
+  const a = document.getElementById('d-go'); a.href = oaldURL(q);
+  setTimeout(viewDict, 300);
+  return true;
+}
+function dictClass(k){ const D = dictState(); dictSave(); D.draft.cls = D.draft.cls === k ? '' : k; save(); viewDict(); }
+async function dictPaste(k){
+  try{ const t = (await navigator.clipboard.readText()).trim(); if(!t){ toast('Nothing to paste – copy text in the dictionary first.'); return; }
+    const el = document.getElementById('d-'+k); el.value = t; dictSave(); dictHint(); }
+  catch(e){ toast('Press and hold in the box, then tap “Paste”.'); document.getElementById('d-'+k).focus(); }
+}
+function dictEN(){ const D = dictState(); let en = (document.getElementById('d-en')?.value ?? D.draft.en).trim().replace(/\s*\([^)]*\)\s*$/,''); if(en && (D.draft.cls==='v.' || D.draft.cls==='phr. v.') && !/^to\s/i.test(en)) en = 'to ' + en; if(en && D.draft.cls) en += ' (' + D.draft.cls + ')'; return en; }
+function dictHint(){
+  const el = document.getElementById('d-exhint'); if(!el) return;
+  const ex = document.getElementById('d-ex').value.trim(), en = dictEN();
+  if(!ex || !en){ el.textContent = ''; el.className = 'hint'; return; }
+  const ok = !!gapInfo({en, ex});
+  el.className = 'hint ' + (ok ? 'ok' : 'no');
+  el.textContent = ok ? '✓ The sentence contains the word – the app can make gap sentences from it.' : '⚠ The word is not in the sentence (or has a different form). Gap sentences won’t work for this word.';
+}
+function dictSetChange(sel){
+  if(sel.value === '__new'){ const n = prompt('Name of the new list:', ''); if(n && n.trim()){ const name = n.trim(); let s = findSetByName(name); if(!s){ s = {id:uid(), name, active:true, created:Date.now()}; DB.sets[s.id] = s; } dictState().set = s.id; } dictSave(); viewDict(); return; }
+  dictState().set = sel.value; save();
+}
+function dictAdd(){
+  dictSave();
+  const D = dictState(), d = D.draft, en = dictEN();
+  if(!en){ toast('Enter the English word.'); return; }
+  if(!d.de.trim() && !d.def.trim()){ toast('Add a German meaning or an English explanation.'); return; }
+  let set = D.set && DB.sets[D.set];
+  if(!set){ set = findSetByName(DICT_SET) || (DB.sets[(()=>{ const id = uid(); DB.sets[id] = {id, name:DICT_SET, active:true, created:Date.now()}; return id; })()]); D.set = set.id; }
+  const dup = cards().find(c => c.set===set.id && norm(c.en)===norm(en));
+  const w = {en, de:d.de.trim(), def:d.def.trim(), ex:d.ex.trim(), src:'OALD'};
+  Object.keys(w).forEach(k => { if(!w[k]) delete w[k]; });
+  let id;
+  if(dup){ Object.assign(dup, w); id = dup.id; }
+  else{ id = uid(); DB.cards[id] = Object.assign({id, set:set.id, n:++DB.seq, reps:0}, w); }
+  D.recent = [id, ...D.recent.filter(x => x !== id)].slice(0, 8);
+  D.draft = {q:'', en:'', cls:'', de:'', def:'', ex:''};
+  save(); toast(dup ? `Updated in “${set.name}”` : `Added to “${set.name}”`); viewDict();
+  document.getElementById('d-q').focus();
+}
+function dictClear(){ dictState().draft = {q:'', en:'', cls:'', de:'', def:'', ex:''}; save(); viewDict(); }
+function viewDict(){
+  const D = dictState(), d = D.draft;
+  const sets = Object.values(DB.sets).filter(s => !s.demo).sort((a,b)=>a.created-b.created);
+  if(D.set && !DB.sets[D.set]) D.set = null;
+  const cur = D.set || (findSetByName(DICT_SET)||{}).id || '';
+  const recent = D.recent.map(id => DB.cards[id]).filter(Boolean);
+  const fld = (k, label, ph, ta, paste) => `<label class="f">${label}</label><div class="fld">${ta
+      ? `<textarea class="prose" id="d-${k}" style="min-height:64px" placeholder="${ph}" oninput="dictSave();dictHint()">${esc(d[k])}</textarea>`
+      : `<input id="d-${k}" type="text" placeholder="${ph}" value="${esc(d[k])}" oninput="dictSave();dictHint()" autocapitalize="off" autocorrect="off">`}${paste ? `<button class="paste" onclick="dictPaste('${k}')" title="Paste">📋 Paste</button>` : ''}</div>`;
+  app.innerHTML = `
+    <div class="card tint">
+      <h2>📖 Dictionary</h2>
+      <p class="small muted" style="margin-top:-4px">Look up a word in the <b>Oxford Learner’s Dictionary</b>. Copy what you need, come back here and add the word to one of your lists.</p>
+      <div class="dict-search">
+        <input id="d-q" type="search" placeholder="e.g. binge-watch, revenue, take a toll" value="${esc(d.q)}" autocapitalize="off" autocorrect="off" enterkeyhint="search"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();if(dictLookup())document.getElementById('d-go').click()}">
+        <a id="d-go" class="btn primary" href="${esc(d.q ? oaldURL(d.q) : OALD)}" target="_blank" rel="noopener" onclick="return dictLookup()">Look up</a>
+      </div>
+      <p class="small muted" style="margin:8px 0 0">The dictionary opens in a new window. ${IS_IOS && STANDALONE ? 'Tap <b>Done</b> to come back to the app.' : 'Switch back to this tab afterwards – your entries stay here.'}</p>
+    </div>
+    <div class="card">
+      <div class="spread"><h3 style="margin:0">Add to my list</h3>${(d.en||d.de||d.def||d.ex) ? `<button class="btn ghost sm" onclick="dictClear()">Clear</button>` : ''}</div>
+      ${fld('en','English word or phrase','e.g. to binge-watch sth', false, false)}
+      <label class="f">Word class</label>
+      <div class="wcls">${WCLS.map(([k,l]) => `<button class="chip ${d.cls===k?'on':''}" onclick="dictClass('${k}')">${l}</button>`).join('')}</div>
+      ${fld('de','German','e.g. am Stück schauen', false, false)}
+      ${fld('def','English explanation <span class="muted" style="font-weight:400">(copy it from the dictionary)</span>','to watch many episodes of a series one after the other', true, true)}
+      ${fld('ex','Example sentence <span class="muted" style="font-weight:400">(from the dictionary or your own)</span>','We binge-watched the whole season in one weekend.', true, true)}
+      <div id="d-exhint" class="hint"></div>
+      <label class="f">Add to list</label>
+      <select id="d-set" onchange="dictSetChange(this)">
+        ${cur ? '' : `<option value="" selected>${esc(DICT_SET)} (new)</option>`}
+        ${sets.map(s => `<option value="${s.id}" ${s.id===cur?'selected':''}>${esc(s.name)}</option>`).join('')}
+        <option value="__new">+ New list …</option>
+      </select>
+      <div class="actions"><button class="btn primary big" onclick="dictAdd()">＋ Add word</button></div>
+    </div>
+    ${recent.length ? `<div class="card"><h3>Recently added</h3><ul class="wl">${recent.map(c => `<li onclick="editWord('${c.id}')"><div class="w"><b>${esc(headword(c.en))}</b> <span class="small muted">${esc(wordClass(c.en))}</span><div>${esc(c.de||c.def||'')}</div></div><span class="due">${esc((DB.sets[c.set]||{}).name||'')}</span></li>`).join('')}</ul></div>` : ''}`;
+  dictHint();
+}
+
+/* ===================== Import ===================== */
+let PENDING = null;
+function viewImport(){
+  const names = Object.values(DB.sets).map(s => s.name);
+  app.innerHTML = `
+    <div class="card">
+      <div class="spread"><h2 style="margin:0">Import words</h2><button class="btn primary sm" onclick="pasteWords()">📋 Paste words</button></div>
+      <p class="muted small" style="margin-top:8px">Paste a <b>vocab code</b> from one of our class apps, or copy a table (Word, Excel, Pages, Numbers) and paste it here.</p>
+      <label class="f">Set name <span class="muted" style="font-weight:400">(used for tables – codes bring their own name)</span></label>
+      <input id="imp-name" type="text" list="setnames" placeholder="e.g. U1 M3 Influencers" value="${esc(PENDING?.name||'')}">
+      <datalist id="setnames">${names.map(n => `<option value="${esc(n)}">`).join('')}</datalist>
+      <label class="f">Code or table</label>
+      <textarea id="imp-text" placeholder='{"set":"U1 M5 Online harms","words":[{"en":"genuine (adj.)","de":"echt"}]}
+
+or a table:
+english	german	explanation	example
+genuine (adj.)	echt	real, not fake	to tell when a review is genuine'>${esc(PENDING?.text||'')}</textarea>
+      <div class="row" style="margin-top:10px">
+        <label class="btn ghost sm" style="cursor:pointer">📄 Open file<input type="file" accept=".json,.csv,.txt,.tsv,text/plain,application/json" style="display:none" onchange="readFile(this)"></label>
+        <span style="flex:1"></span>
+        <button class="btn primary" onclick="previewImport()">Check</button>
+      </div>
+      <div id="imp-prev"></div>
+    </div>
+    <div class="card">
+      <h3>Accepted formats</h3>
+      <p class="small"><b>1 · Vocab code</b> (from the class apps, the “Share code” button, or your teacher):</p>
+      <pre class="code">{"set":"U1 M5 Online harms","words":[
+ {"en":"genuine (adj.)","de":"echt","def":"real, not fake","ex":"to tell when a review is genuine"}]}</pre>
+      <p class="small">Optional: <code>"test":"2026-11-24","testName":"1. Schulaufgabe"</code> after the set name sets the test for the list. Lists with the same date count as one test.</p>
+      <p class="small"><b>2 · Table</b> with columns in this order: <i>English · German · explanation · example</i> (only the first two are needed). Columns may be separated by tabs (copied from Excel/Word), “;” or “|”. A header row with names like <i>Word / German / Explanation / Example</i> is recognised in any order.</p>
+      <p class="small"><b>3 · Simple list</b>, one word per line: <code>genuine – echt</code></p>
+      <p class="small muted">Words that are already in the set are updated – your progress stays.</p>
+    </div>`;
+}
+function readFile(inp){
+  const f = inp.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => { document.getElementById('imp-text').value = r.result; const n = document.getElementById('imp-name'); if(!n.value) n.value = f.name.replace(/\.[^.]+$/,''); previewImport(); };
+  r.readAsText(f);
+}
+function previewImport(){
+  const text = document.getElementById('imp-text').value, name = document.getElementById('imp-name').value.trim() || 'My words';
+  if(isProgressCode(text)){ receiveModal(text.trim()); return; }
+  const box = document.getElementById('imp-prev');
+  let data;
+  try{ data = parseInput(text, name); }catch(e){ box.innerHTML = `<div class="fb bad" style="margin-top:12px">${esc(e.message)}</div>`; return; }
+  const words = previewWords(data).map(normWord).filter(Boolean);
+  if(!words.length){ box.innerHTML = `<div class="fb bad" style="margin-top:12px">No words recognised. Check the format below.</div>`; return; }
+  PENDING = {text, name, data};
+  const setName = data.set || (data.sets ? data.sets.map(s=>s.set||s.name).join(', ') : name);
+  box.innerHTML = `<div class="fb ok" style="margin-top:12px">
+    <h4>${words.length} words found → set “${esc(setName)}”</h4>
+    <table class="prev"><tr><th>English</th><th>German</th><th>Explanation</th><th>Example</th></tr>
+    ${words.slice(0,6).map(w => `<tr><td>${esc(w.en)}</td><td>${esc(w.de||'')}</td><td>${esc(w.def||'')}</td><td>${esc(w.ex||'')}</td></tr>`).join('')}
+    ${words.length>6 ? `<tr><td colspan="4" class="muted">… and ${words.length-6} more</td></tr>` : ''}</table>
+    <div class="actions"><button class="btn primary" onclick="doImport()">Import ${words.length} words</button></div></div>`;
+}
+function doImport(){
+  if(!PENDING) return;
+  try{
+    const r = importData(PENDING.data, PENDING.name);
+    PENDING = null;
+    toast(`${r.added} new · ${r.updated} updated in “${r.sets.join(', ')}”`);
+    go('words');
+  }catch(e){ toast(e.message); }
+}
+
+/* ===================== Sentences ===================== */
+function viewSentences(){
+  const list = DB.sentences;
+  app.innerHTML = `<div class="card">
+    <div class="spread"><h2 style="margin:0">My sentences</h2>
+      ${list.length ? `<button class="btn primary sm" onclick="copyText(DB.sentences.map(s=>s.word+': '+s.text).join('\\n'),'Sentences copied – paste them for your teacher.')">Copy all</button>` : ''}</div>
+    <p class="small muted">Sentences you wrote in “My sentence” tasks. Ask your teacher or a partner to check them.</p>
+    ${list.length ? list.map(s => `<div class="sent"><div class="spread"><b>${esc(s.word)}</b><button class="btn ghost sm" onclick="DB.sentences=DB.sentences.filter(x=>x.id!=='${s.id}');save();viewSentences()">Delete</button></div><div>${esc(s.text)}</div></div>`).join('')
+      : '<p>No sentences yet. They appear once you know a word well – or choose “My sentence” on the start page.</p>'}
+  </div>`;
+}
+
+/* ===================== Options ===================== */
+function viewOptions(){
+  const s = DB.settings;
+  const sel = (key, opts, fmt) => `<select onchange="DB.settings.${key}=+this.value;save()">${opts.map(o => `<option value="${o}" ${s[key]===o?'selected':''}>${fmt(o)}</option>`).join('')}</select>`;
+  app.innerHTML = `
+    <div class="card tint">
+      <div class="spread"><h3 style="margin:0">💾 Backup</h3><button class="btn primary" onclick="backupNow()">💾 Back up now</button></div>
+      <p class="small" style="margin:8px 0 4px">One click saves <b>everything</b> in one file: all lists, words, your progress, your sentences and settings.</p>
+      <p class="small muted" style="margin:0">${backupInfo()} To restore it (e.g. on a new tablet): <b>Receive progress</b> → <b>Open file</b>.</p>
+    </div>
+    <div class="card">
+      <h2>Options</h2>
+      <label class="f">New words per day</label>${sel('newPerDay',[5,10,15,20,30],o=>o+' new words')}
+      <label class="f">Cards per round</label>${sel('roundSize',[10,15,20,30],o=>o+' cards'+(o===20?' (recommended)':''))}
+      <p class="small muted" style="margin-top:6px">There is no daily maximum: all due words are shown, in rounds. If you have many reviews waiting (over ${BRAKE_HALF}), you get fewer new words until you have caught up. Words from a list with a test in the next ${URGENT_DAYS} days are always introduced.</p>
+      <label class="f">How much do you want to remember?</label>${sel('retention',[0.85,0.9,0.95],o=>({0.85:'85 % – fewer reviews',0.9:'90 % – recommended',0.95:'95 % – before an exam (many more reviews)'})[o])}
+      <p class="small muted" style="margin-top:8px">The app uses the FSRS memory model: it estimates for every word when you are about to forget it and shows it to you just before.</p>
+    </div>
+    <div class="card">
+      <h3>📱 Tablet &amp; phone</h3>
+      <p class="small">Your progress is saved only on this device. If you learn on two devices, <b>bring your progress along every time you switch</b>:</p>
+      <ol class="small" style="padding-left:20px;margin:6px 0 10px">
+        <li>On the device you used last: <b>Send progress</b> (copy the code or save it as a file).</li>
+        <li>On the other device: <b>Receive progress</b> and paste the code or open the file.</li>
+      </ol>
+      <div class="row">
+        <button class="btn primary sm" onclick="sendProgress()">⬆ Send progress</button>
+        <button class="btn primary sm" onclick="receiveModal()">⬇ Receive progress</button>
+      </div>
+      <p class="small muted" style="margin-top:10px">Both devices are merged word by word: for every word the most recent practice counts, nothing is overwritten with older progress. iPad + iPhone with the same Apple ID: copy on one device and paste on the other (Universal Clipboard), or AirDrop the file. Otherwise send the code to yourself (e.g. in a chat or e-mail).</p>
+      ${DB.meta && (DB.meta.sent || DB.meta.got) ? `<p class="small muted">${DB.meta.sent ? 'Last sent: ' + fmtStamp(DB.meta.sent) : ''}${DB.meta.sent && DB.meta.got ? ' · ' : ''}${DB.meta.got ? 'Last received: ' + fmtStamp(DB.meta.got) : ''}</p>` : ''}
+      <p class="small muted">The same code is also your <b>backup</b> – keep one somewhere safe from time to time.</p>
+    </div>
+    <div class="card">
+      <h3>Start over</h3>
+      <div class="row">
+        <button class="btn ghost sm" onclick="confirmBox('Reset your progress for all words? Your words stay.','Reset',()=>{cards().forEach(c=>Object.assign(c,{reps:0,s:null,d:null,due:null,last:null,lapses:0}));DB.history={};DB.daily={day:0,newCount:0,reviews:0};save();toast('Progress reset');render()})">Reset progress</button>
+        <button class="btn ghost sm" onclick="loadDemo()">${demoSet() ? '↺ Restart demo list' : 'Load demo list'}</button>
+        <button class="btn danger sm" onclick="confirmBox('Delete all words, sets, sentences and progress?','Delete everything',()=>{DB=blank();save();toast('Everything deleted');render()})">Delete everything</button>
+        <button class="btn ghost sm" onclick="restoreModal()">Replace everything with a code</button>
+      </div>
+    </div>`;
+}
+function restoreModal(){
+  modal(`<h3>Replace everything</h3><p class="small muted">Paste a code. This deletes everything on this device and replaces it with the code. To combine two devices, use <b>Receive progress</b> instead.</p>
+    <textarea id="m-bk"></textarea>
+    <div class="row" style="margin-top:10px"><label class="btn ghost sm" style="cursor:pointer">📄 Open file<input type="file" accept=".txt,.json,text/plain,application/json" style="display:none" onchange="const r=new FileReader();r.onload=()=>{document.getElementById('m-bk').value=r.result};r.readAsText(this.files[0])"></label></div>
+    <div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="restore()">Restore</button></div>`);
+}
+async function restore(){
+  try{
+    const d = await unpackProgress(document.getElementById('m-bk').value);
+    if(!d.cards || !d.sets) throw 0;
+    DB = Object.assign(blank(), d); DB.settings = Object.assign(blank().settings, d.settings||{});
+    save(); closeModal(); toast('Backup restored'); go('today');
+  }catch(e){ toast('This is not a valid backup code.'); }
+}
+
+/* ===================== Transfer between devices ===================== */
+let DOWNLOADS = null;
+function initDownloads(){ try{ if(!DOWNLOADS && window.claude && window.claude.use) window.claude.use('downloads').then(d => { if(d){ DOWNLOADS = d; if(VIEW==='options') render(); } }).catch(()=>{}); }catch(e){} }
+initDownloads(); window.addEventListener('load', initDownloads);
+function fmtStamp(ms){ return new Date(ms).toLocaleString('en-GB', {weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}); }
+function b64(buf){ const u = new Uint8Array(buf); let s = ''; for(let i=0;i<u.length;i+=0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i+0x8000)); return btoa(s); }
+function unb64(t){ const s = atob(t); const u = new Uint8Array(s.length); for(let i=0;i<s.length;i++) u[i] = s.charCodeAt(i); return u; }
+async function packProgress(){
+  const data = Object.assign({}, DB); delete data.meta;
+  const json = JSON.stringify({kind:'vocab-trainer-progress', v:1, at:Date.now(), db:data});
+  if('CompressionStream' in window){
+    try{ const st = new Blob([json]).stream().pipeThrough(new CompressionStream('gzip')); return 'VT1:' + b64(await new Response(st).arrayBuffer()); }catch(e){}
+  }
+  return json;
+}
+async function unpackProgress(text){
+  text = String(text||'').trim();
+  if(text.startsWith('VT1:')){
+    if(!('DecompressionStream' in window)) throw new Error('This browser is too old for transfer codes. Please update it.');
+    const st = new Blob([unb64(text.slice(4).replace(/\s+/g,''))]).stream().pipeThrough(new DecompressionStream('gzip'));
+    text = await new Response(st).text();
+  }
+  const o = JSON.parse(text); return o.db || o;
+}
+function isProgressCode(text){ const t = String(text||'').trim(); return t.startsWith('VT1:') || (/^\{/.test(t) && /"cards"\s*:/.test(t) && /"sets"\s*:/.test(t)); }
+async function sendProgress(){
+  const code = await packProgress();
+  DB.meta = Object.assign(DB.meta||{}, {sent:Date.now()}); save();
+  const kb = Math.max(1, Math.round(code.length/1024));
+  modal(`<h3>⬆ Send progress</h3>
+    <p class="small">${cards().length} words · ${cards().filter(c=>c.reps).length} with progress · ${kb} KB</p>
+    <div class="actions" style="margin-top:6px">
+      <button class="btn primary" onclick="copyText(window._code,'Code copied – now paste it on your other device.')">Copy code</button>
+      ${DOWNLOADS || !SANDBOXED ? `<button class="btn ghost" onclick="saveProgressFile()">${canShareFiles() ? 'Share as file (AirDrop …)' : 'Save as file'}</button>` : ''}
+    </div>
+    <p class="small muted" style="margin-top:10px">On the other device: Options → <b>Receive progress</b>.</p>
+    <details><summary class="small">Show code</summary><textarea readonly onclick="this.select()" style="min-height:90px">${esc(code)}</textarea></details>
+    <div class="actions"><button class="btn ghost" onclick="closeModal();render()">Close</button></div>`);
+  window._code = code;
+}
+async function saveProgressFile(){
+  try{
+    const d = new Date(), stamp = d.toISOString().slice(0,10) + '_' + String(d.getHours()).padStart(2,'0') + String(d.getMinutes()).padStart(2,'0');
+    const name = 'vocab-progress_' + stamp + '.txt';
+    if(DOWNLOADS){ await DOWNLOADS.save({filename:name, data:window._code}); toast('File saved – AirDrop or send it to your other device.'); return; }
+    const file = new File([window._code], name, {type:'text/plain'});
+    if(canShareFiles(file)){ await navigator.share({files:[file], title:'Vocab Trainer progress'}); return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    toast('File saved in Downloads – send it to your other device.');
+  }catch(e){ if(e && e.name !== 'AbortError') toast('Saving did not work – use “Copy code” instead.'); }
+}
+function receiveModal(prefill){
+  modal(`<h3>⬇ Receive progress</h3>
+    <p class="small muted">Paste the code from your other device, or open the file. Your progress here is kept – both devices are combined.</p>
+    <textarea id="m-rx" placeholder="VT1:…">${esc(prefill||'')}</textarea>
+    <div class="row" style="margin-top:10px">
+      <label class="btn ghost sm" style="cursor:pointer">📄 Open file<input type="file" accept=".txt,.json,text/plain,application/json" style="display:none" onchange="const r=new FileReader();r.onload=()=>{document.getElementById('m-rx').value=r.result};r.readAsText(this.files[0])"></label>
+      <span style="flex:1"></span>
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="receiveProgress()">Combine</button>
+    </div>`);
+}
+async function receiveProgress(){
+  let o;
+  try{ o = await unpackProgress(document.getElementById('m-rx').value); if(!o.cards || !o.sets) throw 0; }
+  catch(e){ toast(e && e.message ? e.message : 'This is not a valid progress code. Copy it again – completely.'); return; }
+  const r = mergeProgress(o);
+  closeModal();
+  modal(`<h3>✅ Progress combined</h3>
+    <div class="stats"><div class="stat"><b>${r.updated}</b><span>words updated</span></div><div class="stat"><b>${r.added}</b><span>new words</span></div><div class="stat"><b>${r.sets}</b><span>new lists</span></div></div>
+    <p class="small muted">${r.kept} words were already more recent on this device and stayed as they are.</p>
+    <div class="actions"><button class="btn primary" onclick="closeModal();go('today')">Go to today</button></div>`);
+}
+/* Merge another device's data: lists by name, words by list + English word.
+   Per word, the more recent practice wins; nothing is replaced by older progress. */
+function mergeProgress(o){
+  let added = 0, updated = 0, kept = 0, newSets = 0;
+  const map = {};
+  for(const os of Object.values(o.sets||{})){
+    let ls = findSetByName(os.name||'');
+    if(!ls){ ls = Object.assign({}, os, {id:uid()}); DB.sets[ls.id] = ls; newSets++; }
+    else if(os.test != null && (ls.test == null || ls.test < dayNum())){ ls.test = os.test; if(os.testName) ls.testName = os.testName; }
+    map[os.id] = ls.id;
+  }
+  const idx = {}; cards().forEach(c => idx[c.set + '|' + norm(c.en)] = c);
+  const idMap = {};
+  for(const oc of Object.values(o.cards||{})){
+    const sid = map[oc.set]; if(!sid || !oc.en) continue;
+    const key = sid + '|' + norm(oc.en); let lc = idx[key];
+    if(!lc){ const id = uid(); lc = DB.cards[id] = Object.assign({}, oc, {id, set:sid, n:++DB.seq}); idx[key] = lc; idMap[oc.id] = id; added++; continue; }
+    idMap[oc.id] = lc.id;
+    const oL = oc.reps ? (oc.last ?? -1) : -2, lL = lc.reps ? (lc.last ?? -1) : -2;
+    if(oL > lL || (oL === lL && (oc.reps||0) > (lc.reps||0))){ ['s','d','due','last','reps','lapses'].forEach(k => lc[k] = oc[k]); updated++; }
+    else if(oc.reps) kept++;
+    if(oc.prep && (!lc.prep || (oc.prep.test === lc.prep.test ? (oc.prep.n > lc.prep.n || (oc.prep.n === lc.prep.n && oc.prep.t > lc.prep.t)) : oc.prep.t > (lc.prep.t||0)))) lc.prep = Object.assign({}, oc.prep);
+  }
+  const have = new Set(DB.sentences.map(x => x.id));
+  for(const x of (o.sentences||[])) if(!have.has(x.id)) DB.sentences.push(Object.assign({}, x, {card: idMap[x.card] || x.card}));
+  DB.sentences.sort((a,b) => (b.day||0) - (a.day||0));
+  for(const k in (o.history||{})) DB.history[k] = Math.max(DB.history[k]||0, o.history[k]);
+  touchDaily(); if(o.daily && o.daily.day === DB.daily.day) DB.daily.newCount = Math.max(DB.daily.newCount, o.daily.newCount||0);
+  DB.meta = Object.assign(DB.meta||{}, {got:Date.now()});
+  save();
+  return {added, updated, kept, sets:newSets};
+}
+
+
+/* ===================== One-click backup ===================== */
+const BACKUP_EVERY = 7;
+function backupInfo(){
+  const b = DB.meta && DB.meta.backup;
+  return b ? `Last backup: ${fmtStamp(b)}.` : 'You have not saved a backup yet.';
+}
+function backupDue(){
+  if(cards().filter(c => c.reps).length < 10) return false;
+  const b = DB.meta && DB.meta.backup;
+  return !b || dayNum() - cardDay(b) >= BACKUP_EVERY;
+}
+function backupName(){ const d = new Date(); return 'vocab-backup_' + d.toISOString().slice(0,10) + '_' + String(d.getHours()).padStart(2,'0') + String(d.getMinutes()).padStart(2,'0') + '.txt'; }
+function backupDone(){ DB.meta = Object.assign(DB.meta||{}, {backup:Date.now()}); save(); if(VIEW==='options' || VIEW==='today') render(); }
+async function backupNow(){
+  const code = await packProgress(), name = backupName();
+  window._code = code;
+  try{
+    if(DOWNLOADS){ await DOWNLOADS.save({filename:name, data:code}); backupDone(); toast('Backup saved ✓'); return; }
+    const file = new File([code], name, {type:'text/plain'});
+    if(canShareFiles(file)){ await navigator.share({files:[file], title:'Vocab Trainer backup'}); backupDone(); toast('Backup saved ✓'); return; }
+    if(SANDBOXED) throw Object.assign(new Error('blocked'), {name:'NotAllowedError'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    backupDone(); toast('Backup saved in Downloads ✓');
+  }catch(e){
+    if(e && e.name === 'AbortError') return;
+    // e.g. the browser blocked the share sheet: offer a second tap, or the code
+    modal(`<h3>💾 Backup</h3><p class="small">Your backup is ready (${Math.max(1, Math.round(code.length/1024))} KB).</p>
+      <div class="actions">
+        ${DOWNLOADS || !SANDBOXED ? `<button class="btn primary" onclick="closeModal();saveProgressFile().then(backupDone)">Save as file</button>` : ''}
+        <button class="btn ghost" onclick="copyText(window._code,'Backup code copied – paste it somewhere safe (e.g. Notes).');backupDone();closeModal()">Copy code</button>
+      </div>
+      <div class="actions"><button class="btn ghost" onclick="closeModal()">Close</button></div>`);
+  }
+}
+
+/* ===================== Paste words from the clipboard ===================== */
+async function pasteWords(){
+  let text = '';
+  try{ text = await navigator.clipboard.readText(); }catch(e){}
+  if(!text || !text.trim()){
+    go('import');
+    setTimeout(() => { const t = document.getElementById('imp-text'); if(t){ t.focus(); } toast('Long-press in the box → Paste'); }, 50);
+    return;
+  }
+  if(isProgressCode(text)){ receiveModal(text.trim()); return; }
+  if(VIEW !== 'import') go('import');
+  const t = document.getElementById('imp-text'); t.value = text; previewImport();
+}
+
+/* ===================== Hosting: offline app, install, storage ===================== */
+const SANDBOXED = (() => { try{ return window.self !== window.top; }catch(e){ return true; } })();
+function canShareFiles(file){ try{ return !!(navigator.canShare && navigator.canShare({files:[file || new File(['x'], 'x.txt', {type:'text/plain'})]})); }catch(e){ return false; } }
+const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const STANDALONE = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+let INSTALL_PROMPT = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); INSTALL_PROMPT = e; if(VIEW==='today') render(); });
+if(!SANDBOXED && 'serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+if(!SANDBOXED && navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(() => {}); }
+function installNote(){
+  if(SANDBOXED || STANDALONE || (DB.meta && DB.meta.hideInstall)) return '';
+  const close = `<button class="btn ghost sm" onclick="DB.meta=Object.assign(DB.meta||{},{hideInstall:true});save();render()">Later</button>`;
+  if(IS_IOS) return `<div class="warn"><b>📲 Put the app on your home screen:</b> tap <b>Share</b> (□↑) → <b>Add to Home Screen</b>. Then it opens like an app, works offline – and Safari cannot delete your progress (it may delete website data after 7 days without a visit).<div class="row" style="margin-top:8px">${close}</div></div>`;
+  if(INSTALL_PROMPT) return `<div class="warn"><b>📲 Install the app</b> – it opens like an app, works offline and keeps your progress safe.<div class="row" style="margin-top:8px"><button class="btn primary sm" onclick="INSTALL_PROMPT.prompt();INSTALL_PROMPT.userChoice.finally(()=>{INSTALL_PROMPT=null;render()})">Install</button>${close}</div></div>`;
+  return '';
+}
+
+
+/* ===================== Import via link (#import=…) from the class apps ===================== */
+function b64urlToText(s){ s = s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length % 4) s += '='; const bin = atob(s); return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0))); }
+let LINK_IMPORT = null;
+function checkLinkImport(){
+  const h = location.hash || '';
+  if(!h.startsWith('#import=')) return;
+  try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+  let text, data;
+  try{ text = b64urlToText(decodeURIComponent(h.slice(8))); data = JSON.parse(text); }
+  catch(e){ toast('This link is broken – ask your teacher for the code.'); return; }
+  const words = previewWords(data).map(normWord).filter(Boolean);
+  if(!words.length){ toast('No words found in this link.'); return; }
+  LINK_IMPORT = {data, text};
+  const setName = data.set || 'My words';
+  const exists = findSetByName(setName);
+  const ios = IS_IOS && !STANDALONE;
+  modal(`<h3>📥 Import words</h3>
+    <p><b>${words.length} words</b> → list “${esc(setName)}”${exists ? ' <span class="muted small">– already there: words are updated, your progress stays.</span>' : ''}</p>
+    <table class="prev"><tr><th>English</th><th>German</th></tr>${words.slice(0,5).map(w => `<tr><td>${esc(w.en)}</td><td>${esc(w.de||'')}</td></tr>`).join('')}${words.length>5 ? `<tr><td colspan="2" class="muted">… and ${words.length-5} more</td></tr>` : ''}</table>
+    ${ios ? `<div class="card tint" style="margin:12px 0 0;padding:14px">
+        <b>You use the Vocab Trainer from your home screen?</b>
+        <ol class="small" style="padding-left:20px;margin:6px 0 10px"><li>Tap <b>Copy words</b>.</li><li>Open <b>Vocab Trainer</b> from your home screen.</li><li>Tap <b>📋 Paste words</b> on the start page.</li></ol>
+        <button class="btn primary block" onclick="linkCopyForApp()">📋 Copy words</button>
+        <p class="small muted" style="margin:8px 0 0">iPhone/iPad keep the home-screen app and Safari separate – that’s why this extra step is needed.</p>
+      </div>
+      <div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn ghost" onclick="linkImportNow()">Import in Safari</button></div>`
+    : `<div class="actions"><button class="btn ghost" onclick="copyText(LINK_IMPORT.text,'Code copied – open the app → Import → paste.')">📋 Copy code</button><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="linkImportNow()">Import</button></div>`}`);
+}
+async function linkCopyForApp(){
+  try{ await navigator.clipboard.writeText(LINK_IMPORT.text); }
+  catch(e){ copyText(LINK_IMPORT.text); return; }
+  modal(`<div class="done-hero"><div class="emoji">✅</div><h3>Words copied</h3>
+    <p>Now open <b>Vocab Trainer</b> from your home screen and tap <b>📋 Paste words</b>.</p>
+    <p class="small muted">You can close Safari.</p>
+    <div class="actions"><button class="btn ghost" onclick="closeModal()">OK</button></div></div>`);
+}
+function linkImportNow(){
+  if(!LINK_IMPORT) return;
+  try{ const r = importData(LINK_IMPORT.data, 'My words'); LINK_IMPORT = null; closeModal(); toast(`${r.added} new · ${r.updated} updated in “${r.sets.join(', ')}”`); go('words'); }
+  catch(e){ toast(e.message); }
+}
+window.addEventListener('hashchange', checkLinkImport);
+
+/* ===================== Boot ===================== */
+load();
+render();
+checkLinkImport();
+</script>
+</body>
+</html>
