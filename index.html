@@ -4,21 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fachschaft Englisch – FOSBOS Weiden</title>
+<link rel="icon" href="logo-fachschaft-englisch.png">
 <style>
-body{margin:0;font-family:system-ui,sans-serif;background:#f4f4f2;color:#1e2318}
-header{background:#97b400;padding:20px 16px}
-main,header>div{max-width:720px;margin:0 auto}
-h1{margin:0;font-size:1.5rem}
-main{padding:24px 16px}
-a.card{display:block;background:#fff;border:1px solid #d9dbd3;border-radius:6px;padding:16px;color:inherit;text-decoration:none;margin-bottom:12px}
-a.card:hover{border-color:#5c6e00}
-a.card strong{display:block;font-size:1.1rem;color:#5c6e00}
+:root{--green:#97b400;--green-d:#5a6b00;--green-t:#f3f8e2;--ink:#1f2418;--bg:#fbfbf8;--line:#e2e5d8}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+header{background:#fff;border-bottom:3px solid var(--green);display:flex;align-items:center;gap:14px;padding:10px 18px}
+header img{height:72px;width:auto}
+header .k{font-size:11px;letter-spacing:.12em;color:var(--green-d);font-weight:600;text-transform:uppercase}
+header h1{font-size:20px;margin:0;line-height:1.2}
+main{max-width:720px;margin:0 auto;padding:28px 18px}
+a.card{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-left:5px solid var(--green);border-radius:6px;padding:16px;color:inherit;text-decoration:none;margin-bottom:12px}
+a.card:hover{background:var(--green-t)}
+a.card img{width:48px;height:48px;border-radius:10px;flex:none}
+a.card strong{display:block;font-size:1.1rem;color:var(--green-d)}
+footer{text-align:center;font-size:12px;color:#7a8070;padding:24px}
 </style>
 </head>
 <body>
-<header><div><h1>Fachschaft Englisch · FOSBOS Weiden</h1></div></header>
+<header>
+<img src="logo-fachschaft-englisch.png" alt="Logo Fachschaft Englisch">
+<div><div class="k">FOSBOS Weiden</div><h1>Fachschaft Englisch</h1></div>
+</header>
 <main>
-<a class="card" href="vocab-trainer/"><strong>Vocab Trainer</strong>Learn and practise your vocabulary. Your progress is saved on your device only.</a>
+<a class="card" href="vocab-trainer/"><img src="vocab-trainer/icons/icon-192.png" alt=""><span><strong>Vocab Trainer</strong>Learn and practise your vocabulary. Your progress is saved on your device only.</span></a>
 </main>
+<footer>Fachschaft Englisch · FOSBOS Weiden</footer>
 </body>
 </html>
