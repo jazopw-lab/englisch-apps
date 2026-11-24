@@ -1,8 +1,8 @@
 # Englisch-Apps – Fachschaft Englisch FOSBOS Weiden
 
-Öffentliche Lern-Apps für Schülerinnen und Schüler, gehostet über GitHub Pages.
+Lern-Apps für Schülerinnen und Schüler, gehostet über GitHub Pages: https://jazopw-lab.github.io/englisch-apps/
 
-- `vocab-trainer/` – Vocab Trainer (Fortschritt wird nur lokal auf dem Gerät gespeichert)
+- `vocab-trainer/` – Vocab Trainer (offen; Fortschritt nur lokal auf dem Gerät)
+- `klasse-12/`, `klasse-13/` – Reading Labs und Trainer mit Texten, **passwortgeschützt** (AES-verschlüsselt mit StatiCrypt, ein Passwort pro Jahrgangsstufe)
 
-Nur Inhalte ohne fremde, urheberrechtlich geschützte Texte gehören in dieses Repository.
-Alle übrigen Materialien liegen im privaten Repository `englisch-materialien`.
+Apps mit fremden Texten nur verschlüsselt hier ablegen. Die unverschlüsselten Originale liegen im privaten Repository `englisch-materialien`.
