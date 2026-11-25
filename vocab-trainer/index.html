@@ -1341,7 +1341,8 @@ async function packProgress(){
 function cleanCode(text){ return String(text||'').replace(/[\u200B-\u200D\u2060\uFEFF\u00AD]/g,'').trim(); }
 async function unpackProgress(text){
   text = cleanCode(text);
-  const m = text.match(/VT1\s*[:：;.]?\s*([A-Za-z0-9+\/=_\-\s]{20,})/);
+  // with or without the "VT1:" label (a selection can miss the first characters); gzip codes start with "H4sI"
+  const m = text.match(/VT1\s*[:：;.]?\s*([A-Za-z0-9+\/=_\-\s]{20,})/) || text.match(/(H4sI[A-Za-z0-9+\/=_\-\s]{20,})/);
   if(m){
     if(!('DecompressionStream' in window)) throw new Error('This browser is too old for transfer codes. Please update iOS/your browser.');
     let b = m[1].replace(/\s+/g,'').replace(/-/g,'+').replace(/_/g,'/').replace(/=+$/,'');
@@ -1359,7 +1360,7 @@ async function unpackProgress(text){
   try{ o = JSON.parse(text); }catch(e){ throw new Error('This code is incomplete. Copy it again – completely – or send it as a file.'); }
   return o.db || o;
 }
-function isProgressCode(text){ const t = cleanCode(text); return /VT1\s*[:：;.]?\s*[A-Za-z0-9+\/=_\-]{20,}/.test(t) || (/^\{/.test(t) && /"cards"\s*:/.test(t) && /"sets"\s*:/.test(t)); }
+function isProgressCode(text){ const t = cleanCode(text); return /VT1\s*[:：;.]?\s*[A-Za-z0-9+\/=_\-]{20,}/.test(t) || /^H4sI[A-Za-z0-9+\/=_\-]{20,}/.test(t) || (/^\{/.test(t) && /"cards"\s*:/.test(t) && /"sets"\s*:/.test(t)); }
 async function sendProgress(){
   const code = await packProgress();
   DB.meta = Object.assign(DB.meta||{}, {sent:Date.now()}); save();
