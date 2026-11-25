@@ -1336,16 +1336,30 @@ async function packProgress(){
   }
   return json;
 }
+/* Tolerant reading of progress codes: copying via Notes, Messages, Mail etc. can add
+   invisible characters, line breaks, quotes or text around the code. */
+function cleanCode(text){ return String(text||'').replace(/[\u200B-\u200D\u2060\uFEFF\u00AD]/g,'').trim(); }
 async function unpackProgress(text){
-  text = String(text||'').trim();
-  if(text.startsWith('VT1:')){
-    if(!('DecompressionStream' in window)) throw new Error('This browser is too old for transfer codes. Please update it.');
-    const st = new Blob([unb64(text.slice(4).replace(/\s+/g,''))]).stream().pipeThrough(new DecompressionStream('gzip'));
-    text = await new Response(st).text();
+  text = cleanCode(text);
+  const m = text.match(/VT1\s*[:：;.]?\s*([A-Za-z0-9+\/=_\-\s]{20,})/);
+  if(m){
+    if(!('DecompressionStream' in window)) throw new Error('This browser is too old for transfer codes. Please update iOS/your browser.');
+    let b = m[1].replace(/\s+/g,'').replace(/-/g,'+').replace(/_/g,'/').replace(/=+$/,'');
+    while(b.length % 4) b += '=';
+    let bytes;
+    try{ bytes = unb64(b); }catch(e){ throw new Error('This code is damaged. Copy it again – completely – or send it as a file.'); }
+    try{ const st = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip')); text = await new Response(st).text(); }
+    catch(e){ throw new Error('This code is incomplete. Copy it again – completely – or send it as a file.'); }
+  } else {
+    const a = text.indexOf('{'), z = text.lastIndexOf('}');
+    if(a < 0 || z <= a) throw new Error('This is not a progress code. Copy it again – completely.');
+    text = text.slice(a, z+1);
   }
-  const o = JSON.parse(text); return o.db || o;
+  let o;
+  try{ o = JSON.parse(text); }catch(e){ throw new Error('This code is incomplete. Copy it again – completely – or send it as a file.'); }
+  return o.db || o;
 }
-function isProgressCode(text){ const t = String(text||'').trim(); return t.startsWith('VT1:') || (/^\{/.test(t) && /"cards"\s*:/.test(t) && /"sets"\s*:/.test(t)); }
+function isProgressCode(text){ const t = cleanCode(text); return /VT1\s*[:：;.]?\s*[A-Za-z0-9+\/=_\-]{20,}/.test(t) || (/^\{/.test(t) && /"cards"\s*:/.test(t) && /"sets"\s*:/.test(t)); }
 async function sendProgress(){
   const code = await packProgress();
   DB.meta = Object.assign(DB.meta||{}, {sent:Date.now()}); save();
@@ -1387,7 +1401,7 @@ function receiveModal(prefill){
 async function receiveProgress(){
   let o;
   try{ o = await unpackProgress(document.getElementById('m-rx').value); if(!o.cards || !o.sets) throw 0; }
-  catch(e){ toast(e && e.message ? e.message : 'This is not a valid progress code. Copy it again – completely.'); return; }
+  catch(e){ toast(e instanceof Error && !(e instanceof SyntaxError) && e.message ? e.message : 'This is not a valid progress code. Copy it again – completely.'); return; }
   const r = mergeProgress(o);
   closeModal();
   modal(`<h3>✅ Progress combined</h3>
